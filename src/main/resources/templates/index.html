@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Strona główna</title>
+    <script>
+        $('input[name=options-outlined]').change(function(){
+            $('bet-form').submit();
+        });
+    </script>
+</head>
+<body>
+<main layout:fragment="content">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+            <div class="col-2">
+                <p>Popularne Zakłady</p>
+                <div th:each="game: ${top4GamesList}" th:object="${game}">
+                    <p th:text="|*{nameOfTeamA} vs *{nameOfTeamB}|" class="border rounded"></p>
+                </div>
+            </div>
+
+
+            <div class="col-5">
+                <div>
+                    <p>Lista zakładów</p>
+                </div>
+                <div class="border rounded m-2" th:each="game: ${ListOfAvailableGames}">
+
+
+                    <form class="row align-items-end" name="bet-form" th:object="${game}" action="/addBet" method="post">
+
+                        <div class="col">
+                            <p th:text="|*{nameOfTeamA} VS *{nameOfTeamB}|"></p>
+                        </div>
+                        <div class="col">
+                        <div class="row align-items-end">
+                            <div class="col p-2">
+                                <p style="text-align: center">1</p>
+                                <label class="btn btn-outline-success" th:text="*{teamAWinRate}"
+                                       style="vertical-align: top"
+                                       th:for="|*{gameId.toString()}*{nameOfTeamA}|"></label>
+                                <input th:value="${bet}"
+                                       type="radio" class="btn-check" name="options-outlined"
+                                       th:id="|*{gameId.toString()}*{nameOfTeamA}|" autocomplete="off" >
+
+                            </div>
+                            <div class="col p-2">
+                                <p style="text-align: center">X</p>
+                                <input th:value="*{drawRate}" type="radio" class="btn-check" name="options-outlined"
+                                       th:id="|*{gameId.toString()}|" autocomplete="off">
+                                <label class="btn btn-outline-success" th:text="*{drawRate}"
+                                       th:for="|*{gameId.toString()}|"></label>
+                            </div>
+                            <div class="col p-2">
+                                <p style="text-align: center">2</p>
+                                <input th:value="*{teamBWinRate}" type="radio" class="btn-check" name="options-outlined"
+                                       th:id="|*{gameId.toString()}*{nameOfTeamB}|" autocomplete="off">
+                                <label class="btn btn-outline-success" th:text="*{teamBWinRate}"
+                                       th:for="|*{gameId.toString()}*{getNameOfTeamB()}|"></label>
+                            </div>
+                            <button name="button-submit" type="submit">sdds</button>
+                        </div>
+                        </div>
+
+
+                    </form>
+
+
+
+
+                </div>
+            </div>
+
+            <div class="col-4">
+                <p>KUPONY</p>
+            </div>
+
+        </div>
+
+
+    </div>
+</main>
+</body>
+</html>
