@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface BetGameRepository extends JpaRepository<BetGame, Long> {
 
-    List<BetGame> findFirst4ByOrderByGameId();
+
+    List<BetGame> findBetGamesByBet(Bet bet);
 }

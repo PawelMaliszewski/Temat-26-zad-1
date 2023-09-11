@@ -1,5 +1,6 @@
-package com.tema26cwicz1.game;
+package com.tema26cwicz1.controllers;
 
+import com.tema26cwicz1.game.GameRepository;
 import org.springframework.stereotype.Controller;
 
 @Controller

@@ -1,22 +1,27 @@
 package com.tema26cwicz1.bet;
 
 
-import com.tema26cwicz1.Result.Result;
+import com.tema26cwicz1.Result.GameResult;
+import com.tema26cwicz1.game.Game;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class BetGame {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long gameId;
-    @Enumerated(EnumType.ORDINAL)
-    private Result result;
-    @ManyToMany(mappedBy = "betGames", fetch = FetchType.EAGER)
-    private List<Bet> bets;
+    private String gameTitle;
+    private double winRate;
+    @ManyToOne
+    @JoinColumn(name = "bet_id")
+    private Bet bet;
 }

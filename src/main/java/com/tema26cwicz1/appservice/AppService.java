@@ -1,16 +1,13 @@
 package com.tema26cwicz1.appservice;
 
-import com.tema26cwicz1.Result.Result;
+import com.tema26cwicz1.Result.GameResult;
 import com.tema26cwicz1.account.AccountRepository;
-import com.tema26cwicz1.bet.BetGame;
-import com.tema26cwicz1.bet.BetGameRepository;
-import com.tema26cwicz1.bet.BetRepository;
+import com.tema26cwicz1.bet.*;
 import com.tema26cwicz1.game.Game;
 import com.tema26cwicz1.game.GameRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,24 +29,50 @@ public class AppService {
     }
 
     public List<Game> gamesForBet() {
-        return (gameRepository.count() > 0) ? gameRepository.findAll().stream()
-                .filter(bet -> bet.getResult().equals(Result.WAITING))
-                .collect(Collectors.toList()) : null;
+        List<Game> gamesForBet = new ArrayList<>();
+        for (Game game : gameRepository.findAll()) {
+            if (game.getGameResult().name().equals("WAITING")) {
+                gamesForBet.add(game);
+            }
+        }
+        return gamesForBet;
     }
 
     public List<Game> pastGames() {
         return (gameRepository.count() > 0) ? gameRepository.findAll().stream()
-                .filter(bet -> !bet.getResult().equals(Result.WAITING))
+                .filter(bet -> !bet.getGameResult().equals(GameResult.WAITING))
                 .collect(Collectors.toList()) : null;
     }
 
-    public List<Game> findTop4Bets() {
-        List<Game> top4 = new ArrayList<>();
-        for (BetGame betGame : betGameRepository.findFirst4ByOrderByGameId()) {
-            top4.add(gameRepository.getReferenceById(betGame.getId()));
-        }
-        return top4;
+    public List<Game> fourMostFrequentBetGames() {
+        List<Long> collectList = betGameRepository.findAll()
+                .stream().collect(Collectors.groupingBy(BetGame::getGameId, Collectors.counting()))
+                .entrySet().stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .map(Map.Entry::getKey)
+                .limit(4)
+                .toList();
+        return gameRepository.findAllById(collectList);
+    }
+
+    public void addBet(Bet bet) {
+        betRepository.save(bet);
+    }
+
+    public void deleteBet(Long id) {
+        Optional<Bet> betById = betRepository.findById(id);
+        betById.ifPresent(bet -> betGameRepository.deleteAll(bet.getBetGames()));
     }
 
 
+
+//    public double findWinRate(BetGame betGame, Game game) {
+//        if (betGame.getGameResult().name().equals("TEAM_A_WON")) {
+//            return game.getTeamAWinRate();
+//        } else if (betGame.getGameResult().name().equals("TEAM_B_WON")) {
+//            return game.getTeamBWinRate();
+//        }
+//        return game.getDrawRate();
+//    }
 }
+

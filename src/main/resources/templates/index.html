@@ -6,16 +6,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Strona główna</title>
-    <script>
-        $('input[name=options-outlined]').change(function(){
-            $('bet-form').submit();
-        });
-    </script>
+
 </head>
 <body>
 <main layout:fragment="content">
 
-    <div class="container">
+    <div class="container justify-content-center">
 
         <div class="row justify-content-center">
             <div class="col-2">
@@ -30,61 +26,97 @@
                 <div>
                     <p>Lista zakładów</p>
                 </div>
-                <div class="border rounded m-2" th:each="game: ${ListOfAvailableGames}">
+                <div class="border rounded m-2">
 
 
-                    <form class="row align-items-end" name="bet-form" th:object="${game}" action="/addBet" method="post">
-
-                        <div class="col">
-                            <p th:text="|*{nameOfTeamA} VS *{nameOfTeamB}|"></p>
-                        </div>
-                        <div class="col">
-                        <div class="row align-items-end">
-                            <div class="col p-2">
-                                <p style="text-align: center">1</p>
-                                <label class="btn btn-outline-success" th:text="*{teamAWinRate}"
-                                       style="vertical-align: top"
-                                       th:for="|*{gameId.toString()}*{nameOfTeamA}|"></label>
-                                <input th:value="${bet}"
-                                       type="radio" class="btn-check" name="options-outlined"
-                                       th:id="|*{gameId.toString()}*{nameOfTeamA}|" autocomplete="off" >
-
+                    <div th:each="game : ${listOfAvailableGames}">
+                        <form class="row" name="bet-form" th:object="${betGame}" action="/addBet" method="post">
+                            <div>
+                                <input type="number" hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
                             </div>
-                            <div class="col p-2">
-                                <p style="text-align: center">X</p>
-                                <input th:value="*{drawRate}" type="radio" class="btn-check" name="options-outlined"
-                                       th:id="|*{gameId.toString()}|" autocomplete="off">
-                                <label class="btn btn-outline-success" th:text="*{drawRate}"
-                                       th:for="|*{gameId.toString()}|"></label>
+                            <div hidden="hidden" th:object="${bet}">
+                                <input th:if="*{betId > 0}" th:value="*{betId}" th:name="betId">
                             </div>
-                            <div class="col p-2">
-                                <p style="text-align: center">2</p>
-                                <input th:value="*{teamBWinRate}" type="radio" class="btn-check" name="options-outlined"
-                                       th:id="|*{gameId.toString()}*{nameOfTeamB}|" autocomplete="off">
-                                <label class="btn btn-outline-success" th:text="*{teamBWinRate}"
-                                       th:for="|*{gameId.toString()}*{getNameOfTeamB()}|"></label>
+
+
+                            <div>
+                                <table class="table table-bordered table-striped justify-content-center">
+                                    <tr>
+                                        <th rowspan="2" th:text="|${game.nameOfTeamA} VS ${game.nameOfTeamB}|"></th>
+                                        <th>1</th>
+                                        <th>X</th>
+                                        <th>2</th>
+                                    </tr>
+                                    <tr>
+                                        <input hidden="hidden" th:value="|${game.nameOfTeamA} VS ${game.nameOfTeamB}|"
+                                               th:name="gameTitle">
+                                        <td>
+                                            <input type="radio" class="btn-check" name="options-outlined"
+                                                   th:id="|${game.gameId.toString()}${game.nameOfTeamA}|"
+                                                   autocomplete="off" th:value="${game.teamAWinRate}"
+                                                   th:name="winRate" onchange="this.form.submit()">
+                                            <label class="btn btn-outline-success" th:text="${game.teamAWinRate}"
+                                            th:for="|${game.gameId.toString()}${game.nameOfTeamA}|"></label>
+                                        </td>
+                                        <td>
+                                            <input type="radio" class="btn-check" name="options-outlined"
+                                                   th:id="|${game.gameId.toString()}${game.nameOfTeamA}${game.nameOfTeamB}|"
+                                                   autocomplete="off" th:value="${game.drawRate}"
+                                                   th:name="winRate" onchange="this.form.submit()">
+                                            <label class="btn btn-outline-success" th:text="${game.drawRate}"
+                                                   th:for="|${game.gameId.toString()}${game.nameOfTeamA}${game.nameOfTeamB}|"></label>
+                                        </td>
+                                        <td>
+                                            <input type="radio" class="btn-check" name="options-outlined"
+                                                   th:id="|${game.gameId.toString()}${game.nameOfTeamB}|"
+                                                   autocomplete="off" th:value="${game.teamBWinRate}"
+                                                   th:name="winRate" onchange="this.form.submit()">
+                                            <label class="btn btn-outline-success" th:text="${game.teamBWinRate}"
+                                                   th:for="|${game.gameId.toString()}${game.nameOfTeamB}|"></label>
+                                        </td>
+
+                                    </tr>
+                                </table>
+                                <script>
+
+                                    $('input[name=options-outlined]').on('change', function () {
+                                        $(this).closest("form").submit();
+                                    });
+                                </script>
                             </div>
-                            <button name="button-submit" type="submit">sdds</button>
-                        </div>
-                        </div>
 
 
-                    </form>
-
-
-
+                        </form>
+                    </div>
 
                 </div>
             </div>
 
             <div class="col-4">
                 <p>KUPONY</p>
+                <div th:if="${bet}" th:object="${bet}">
+                    <p th:if="*{account}" th:text="|Konto numer: *{account}|"></p>
+                    <p th:unless="*{account}">Kupon nieprzypisany do konta</p>
+                    <p>Zakłady</p>
+                </div>
+                <div th:each="cuoponGame : ${betCouponGamesList}" th:object="${cuoponGame}">
+                    <p class="border rounded"
+                       th:text="|*{gameTitle} Rate: *{winRate}|"></p>
+                </div>
+                <form method="post">
+                    <label>Podaj kwotę zakładu</label>
+                    <input name="money" type="number" >
+                </form>
             </div>
+            <script>
+                $('input[name=money]').on('change', function () {
+                    $(this).closest("form").submit();
+                });
+            </script>
 
         </div>
-
-
     </div>
 </main>
 </body>
+
 </html>
