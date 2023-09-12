@@ -25,5 +25,7 @@ public class Account {
     @OneToMany(mappedBy = "account")
     private List<Bet> accountBets = new ArrayList<>();
 
+    //TO DO
+
 
 }

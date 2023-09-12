@@ -1,5 +1,6 @@
-package com.tema26cwicz1.account;
+package com.tema26cwicz1.controllers;
 
+import com.tema26cwicz1.account.AccountRepository;
 import org.springframework.stereotype.Controller;
 
 @Controller

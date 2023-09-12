@@ -7,6 +7,9 @@ import com.tema26cwicz1.game.Game;
 import com.tema26cwicz1.game.GameRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,9 +31,9 @@ public class AppService {
         this.gameRepository = gameRepository;
     }
 
-    public List<Game> gamesForBet() {
+    public List<Game> gamesForBet(List<Game> gameList) {
         List<Game> gamesForBet = new ArrayList<>();
-        for (Game game : gameRepository.findAll()) {
+        for (Game game : gameList) {
             if (game.getGameResult().name().equals("WAITING")) {
                 gamesForBet.add(game);
             }
@@ -55,24 +58,41 @@ public class AppService {
         return gameRepository.findAllById(collectList);
     }
 
-    public void addBet(Bet bet) {
-        betRepository.save(bet);
-    }
-
     public void deleteBet(Long id) {
         Optional<Bet> betById = betRepository.findById(id);
         betById.ifPresent(bet -> betGameRepository.deleteAll(bet.getBetGames()));
     }
 
+    public double findWinRate(BetGame betGame, Game game) {
+        if (betGame.getGameResult().name().equals("TEAM_A_WON")) {
+            return game.getTeamAWinRate();
+        } else if (betGame.getGameResult().name().equals("TEAM_B_WON")) {
+            return game.getTeamBWinRate();
+        }
+        return game.getDrawRate();
+    }
 
+    public List<Game> onlyUnselectedGames(Long betId) {
+        List<Game> gamesLeft = gameRepository.findAll();
+        List<Game> betGames = new ArrayList<>();
+        Bet bet = betRepository.findById(betId).get();
+        for (BetGame betGame : bet.getBetGames()) {
+            betGames.add(gameRepository.findById(betGame.getGameId()).get());
+        }
+        gamesLeft.removeAll(betGames);
+        System.out.println();
+        return gamesLeft;
+    }
 
-//    public double findWinRate(BetGame betGame, Game game) {
-//        if (betGame.getGameResult().name().equals("TEAM_A_WON")) {
-//            return game.getTeamAWinRate();
-//        } else if (betGame.getGameResult().name().equals("TEAM_B_WON")) {
-//            return game.getTeamBWinRate();
-//        }
-//        return game.getDrawRate();
-//    }
+    public BigDecimal toWin(Bet bet, BigDecimal betAmount) {
+        BigDecimal winRateSum = new BigDecimal("0.00");
+        List<BetGame> betGamesByBet = betGameRepository.findBetGamesByBet(bet);
+        for (BetGame betGame : betGamesByBet) {
+            winRateSum = winRateSum.add(BigDecimal.valueOf(betGame.getWinRate()));
+        }
+        BigDecimal sum = bet.getBetMoney().multiply((betGamesByBet.size() == 1) ?
+                winRateSum : winRateSum.multiply(new BigDecimal("0.84")));
+        return (betAmount.intValue() > 0) ? sum.setScale(2, RoundingMode.CEILING) : new BigDecimal("0");
+    }
 }
 

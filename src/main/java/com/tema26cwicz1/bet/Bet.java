@@ -22,10 +22,5 @@ public class Bet {
     private Account account;
     @OneToMany(mappedBy = "bet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<BetGame> betGames = new ArrayList<>();
-
-
-    public void addBetToList(BetGame betGame) {
-        betGames.add(betGame);
-    }
 }
 

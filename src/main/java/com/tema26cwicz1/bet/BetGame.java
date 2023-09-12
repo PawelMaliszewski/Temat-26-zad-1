@@ -20,8 +20,11 @@ public class BetGame {
     private Long id;
     private Long gameId;
     private String gameTitle;
+    @Enumerated(EnumType.STRING)
+    private GameResult gameResult;
     private double winRate;
     @ManyToOne
     @JoinColumn(name = "bet_id")
     private Bet bet;
+
 }
