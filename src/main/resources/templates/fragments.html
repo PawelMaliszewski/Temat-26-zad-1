@@ -6,14 +6,20 @@
 <body>
 
 <div th:fragment="header">
+    <div class="d-flex justify-content-end">
+        <a href="/" class="link-opacity-50 p-2">Główna strona</a>
+        <a href="/game_list" class="link-opacity-50 p-2">Zarządzaj meczami</a>
+        <a class="link-opacity-50 p-2">Zarządzaj kuponami</a>
+    </div>
     <div class="header">
         <h1 class="header-text" >JAVA BET NAJLEPSZE ZAKŁADY</h1>
     </div>
+
+</div>
+<div  th:fragment="footer">
+    <h5 class="footer "> Wszelkie Prawa zastrzeżone &copy;</h5>
 </div>
 
-<div class="footer" th:fragment="footer">
-    <h5> Wszelkie Prawa zastrzeżone &copy;</h5>
-</div>
 
 </body>
 </html>

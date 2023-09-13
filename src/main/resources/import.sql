@@ -16,6 +16,11 @@ VALUES
     ('Drużyna Z', 'Drużyna N', '1.22', '6.5', '13', 'WAITING'),
     ('Drużyna X', 'Drużyna L', '1.45', '4.5', '7.25', 'WAITING');
 
+-- INSERT INTO BET(BET_ID)
+-- VALUES
+--     ('1'),
+--     ('2');
+
 -- INSERT INTO BET(ACCOUNT_ID, BET_ID, BET_MONEY)
 -- VALUES
 --     (1, 1, '25'),
@@ -25,28 +30,23 @@ VALUES
 --     (2, 5, '1000'),
 --     (2, 6, '200');
 --
--- INSERT INTO BET_GAME (GAME_ID , GAME_RESULT)
+-- INSERT INTO BET_GAME (WIN_RATE, BET_ID, GAME_ID , GAME_RESULT, GAME_TITLE)
 -- VALUES
---     (1, 'TEAM_A_WON'),
---     (2, 'WAITING'),
---     (6, 'TEAM_A_WON'),
---     (1, 'TEAM_B_WON'),
---     (5, 'WAITING'),
---     (4, 'TEAM_B_WON'),
---     (8, 'TEAM_A_WON'),
---     (5, 'DRAW'),
---     (6, 'WAITING'),
---     (6, 'TEAM_B_WON'),
---     (9, 'DRAW');
---
--- INSERT INTO BET_BET_GAMES(BETS_BET_ID , BET_GAMES_ID)
--- VALUES
---     (1, 1),
---     (2, 2),
---     (3, 3),
---     (4, 4),
---     (5, 5),
---     (6, 6);
+--     ('1.14' ,'1' ,'1' , 'TEAM_A_WON', 'Drużyna A VS Drużyna B'),
+--     ('2.14' , '1', '2', 'TEAM_A_WON', 'Drużyna C VS Drużyna D'),
+--     ('1.28' , '2', '3', 'TEAM_A_WON', 'Drużyna Y VS Drużyna R'),
+--     ('1.8' , '2', '4','TEAM_B_WON', 'Drużyna T VS Drużyna D'),
+--     ('2.15' , '3', '5','TEAM_B_WON', 'Drużyna P VS Drużyna T'),
+--     ('2.1' , '4', '6','TEAM_B_WON', 'Drużyna O VS Drużyna H'),
+--     ('5.45' , '4', '7','TEAM_A_WON', 'Drużyna G VS Drużyna Q'),
+--     ('6.5' , '5', '8','DRAW', 'Drużyna Z VS Drużyna N'),
+--     ('4.5' , '6', '9','DRAW', 'Drużyna X VS Drużyna L'),
+--     ('1.8' , '6', '4', 'TEAM_B_WON', 'Drużyna T VS Drużyna D'),
+--     ('3.5' , '6', '7', 'DRAW', 'Drużyna G VS Drużyna Q');
+
+
+
+
 
 
 

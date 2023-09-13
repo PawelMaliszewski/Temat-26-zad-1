@@ -2,16 +2,12 @@ package com.tema26cwicz1.account;
 
 import com.tema26cwicz1.bet.Bet;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
-@NoArgsConstructor
 public class Account {
 
     @Id

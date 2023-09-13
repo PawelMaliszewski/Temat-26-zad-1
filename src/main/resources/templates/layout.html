@@ -12,11 +12,13 @@
 
 </head>
     <body>
-        <div class="container">
+
             <header th:replace="~{fragments::header}"></header>
             <main layout:fragment="content"></main>
-        </div>
+            <footer th:replace="~{fragments::footer}"></footer>
+
+
     </body>
-<footer th:replace="~{fragments::footer}"></footer>
+
 
 </html>

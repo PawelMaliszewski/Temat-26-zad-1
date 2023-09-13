@@ -5,23 +5,69 @@
       layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Strona główna</title>
-
+    <title>Mecze</title>
 </head>
 <body>
 <main layout:fragment="content">
-
-    <table>
-        <thead>
+    <div class="container">
+        <table class="table table-bordered">
+            <thead class="">
             <tr>
-                <th>Id</th>
-                <th>Gospodarze</th>
-                <th>Goście</th>
+                <th class="text-center align-middle" colspan="2">Drużyna</th>
+                <th class="text-center align-middle" colspan="3">Stawka</th>
+                <th class="text-center align-middle" rowspan="2">Wynik</th>
+                <th class="text-center align-middle" rowspan="2">Opcje</th>
             </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+            <tr class="thead-light">
+                <th class="text-center align-middle">gospodarzy</th>
+                <th class="text-center align-middle">gości</th>
+                <th class="text-center align-middle">zw. gospodarzy</th>
+                <th class="text-center align-middle">remis</th>
+                <th class="text-center align-middle">zw. gości</th>
 
+
+            </tr>
+            </thead>
+            <tbody th:each="game: ${gameList}" th:object="${game}">
+            <tr>
+                <td class="text-center align-middle" th:text="*{nameOfTeamA}">a</td>
+                <td class="text-center align-middle" th:text="*{nameOfTeamB}">a</td>
+                <td class="text-center align-middle" th:text="*{teamAWinRate}">a</td>
+                <td class="text-center align-middle" th:text="*{drawRate}">a</td>
+                <td class="text-center align-middle" th:text="*{teamBWinRate}">a</td>
+                <td class="text-center align-middle" th:text="*{gameResult.getDescription()}">a</td>
+                <td class="hstack align-middle">
+
+
+                    <form action="/add_edit" method="post" th:object="${Long}">
+                        <input hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
+                        <button type="submit" class="btn btn-primary me-2">Edytuj</button>
+                    </form>
+
+
+                    <form action="/delete_game" method="post" th:object="${Long}">
+                        <input hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
+                        <button type="submit" class="btn btn-danger me-2"
+                                onclick="return confirm('Czy na pewno chcesz usunąć ten mecz')">Usuń
+                        </button>
+                    </form>
+
+                    <form action="/random_result" method="post" th:object="${Long}">
+                        <input hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
+                        <button type="submit" class="btn btn-success">Wylosuj wynik</button>
+                    </form>
+
+
+                </td>
+
+            </tr>
+
+            </tbody>
+        </table>
+        <form action="/add_edit" method="post">
+            <button class="btn btn-warning" type="submit">Dodaj kolejną gre</button>
+        </form>
+    </div>
 </main>
 </body>
 </html>

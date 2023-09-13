@@ -1,19 +1,9 @@
 package com.tema26cwicz1.game;
 
-
-
 import com.tema26cwicz1.Result.GameResult;
-import com.tema26cwicz1.bet.BetGame;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
-
 
 @Entity
-@Data
-@NoArgsConstructor
 public class Game {
 
     @Id
@@ -27,4 +17,62 @@ public class Game {
     @Enumerated(EnumType.STRING)
     private GameResult gameResult;
 
+    public Game() {
+    }
+
+    public Long getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(Long gameId) {
+        this.gameId = gameId;
+    }
+
+    public String getNameOfTeamA() {
+        return nameOfTeamA;
+    }
+
+    public void setNameOfTeamA(String nameOfTeamA) {
+        this.nameOfTeamA = nameOfTeamA;
+    }
+
+    public String getNameOfTeamB() {
+        return nameOfTeamB;
+    }
+
+    public void setNameOfTeamB(String nameOfTeamB) {
+        this.nameOfTeamB = nameOfTeamB;
+    }
+
+    public double getTeamAWinRate() {
+        return teamAWinRate;
+    }
+
+    public void setTeamAWinRate(double teamAWinRate) {
+        this.teamAWinRate = teamAWinRate;
+    }
+
+    public double getTeamBWinRate() {
+        return teamBWinRate;
+    }
+
+    public void setTeamBWinRate(double teamBWinRate) {
+        this.teamBWinRate = teamBWinRate;
+    }
+
+    public double getDrawRate() {
+        return drawRate;
+    }
+
+    public void setDrawRate(double drawRate) {
+        this.drawRate = drawRate;
+    }
+
+    public GameResult getGameResult() {
+        return gameResult;
+    }
+
+    public void setGameResult(GameResult gameResult) {
+        this.gameResult = gameResult;
+    }
 }
