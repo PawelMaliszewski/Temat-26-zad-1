@@ -1,7 +1,4 @@
-INSERT INTO account (FIRST_NAME, LAST_NAME, EMAIL, BALANCE)
-VALUES
-    ('Jaś', 'Fasola', 'jas@fasola.pl', '250'),
-    ('Kuba', 'Rozpruwacz', 'kuba@rozpruwacz.pl', '2500');
+
 
 
 INSERT INTO GAME(NAME_OF_TEAMA, NAME_OF_TEAMB , TEAMAWIN_RATE, TEAMBWIN_RATE, DRAW_RATE, GAME_RESULT)
@@ -16,33 +13,29 @@ VALUES
     ('Drużyna Z', 'Drużyna N', '1.22', '6.5', '13', 'WAITING'),
     ('Drużyna X', 'Drużyna L', '1.45', '4.5', '7.25', 'WAITING');
 
--- INSERT INTO BET(BET_ID)
--- VALUES
---     ('1'),
---     ('2');
+INSERT INTO BET(BET_MONEY, BET_ID)
+VALUES
+    ('100', '1'),
+    ('55.50', '2'),
+    ('60', '3'),
+    ('5', '4'),
+    ('12', '5'),
+    ('100000', '6');
 
--- INSERT INTO BET(ACCOUNT_ID, BET_ID, BET_MONEY)
--- VALUES
---     (1, 1, '25'),
---     (1, 2, '50'),
---     (1, 3, '100'),
---     (2, 4, '35'),
---     (2, 5, '1000'),
---     (2, 6, '200');
---
--- INSERT INTO BET_GAME (WIN_RATE, BET_ID, GAME_ID , GAME_RESULT, GAME_TITLE)
--- VALUES
---     ('1.14' ,'1' ,'1' , 'TEAM_A_WON', 'Drużyna A VS Drużyna B'),
---     ('2.14' , '1', '2', 'TEAM_A_WON', 'Drużyna C VS Drużyna D'),
---     ('1.28' , '2', '3', 'TEAM_A_WON', 'Drużyna Y VS Drużyna R'),
---     ('1.8' , '2', '4','TEAM_B_WON', 'Drużyna T VS Drużyna D'),
---     ('2.15' , '3', '5','TEAM_B_WON', 'Drużyna P VS Drużyna T'),
---     ('2.1' , '4', '6','TEAM_B_WON', 'Drużyna O VS Drużyna H'),
---     ('5.45' , '4', '7','TEAM_A_WON', 'Drużyna G VS Drużyna Q'),
---     ('6.5' , '5', '8','DRAW', 'Drużyna Z VS Drużyna N'),
---     ('4.5' , '6', '9','DRAW', 'Drużyna X VS Drużyna L'),
---     ('1.8' , '6', '4', 'TEAM_B_WON', 'Drużyna T VS Drużyna D'),
---     ('3.5' , '6', '7', 'DRAW', 'Drużyna G VS Drużyna Q');
+
+INSERT INTO BET_GAME (BET_ID, GAME_ID, GAME_RESULT,  GAME_TITLE, WIN_RATE)
+VALUES
+    ('1' ,'1' , 'TEAM_A_WON', 'Drużyna A VS Drużyna B', '1.14'),
+    ('1', '2', 'TEAM_A_WON', 'Drużyna C VS Drużyna D', '2.14'),
+    ('2', '3', 'TEAM_A_WON', 'Drużyna Y VS Drużyna R', '1.28'),
+    ('2', '4','TEAM_B_WON', 'Drużyna T VS Drużyna D', '1.8'),
+    ('3', '5','TEAM_B_WON', 'Drużyna P VS Drużyna T', '2.15'),
+    ('4', '6','TEAM_B_WON', 'Drużyna O VS Drużyna H', '2.1'),
+    ('4', '7','TEAM_A_WON', 'Drużyna G VS Drużyna Q', '5.45'),
+    ('5', '8','DRAW', 'Drużyna Z VS Drużyna N', '6.5'),
+    ('6', '9','DRAW', 'Drużyna X VS Drużyna L', '4.5'),
+    ('6', '4', 'TEAM_B_WON', 'Drużyna T VS Drużyna D', '1.8'),
+    ('6', '7', 'DRAW', 'Drużyna G VS Drużyna Q', '3.5');
 
 
 

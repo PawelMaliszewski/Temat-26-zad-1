@@ -12,7 +12,7 @@
 <main layout:fragment="content">
 
 
-    <div class="container d-flex justify-content-evenly">
+    <div class="container d-flex flex-wrap justify-content-evenly">
 
         <div class="content col-3">
             <p class="text-center"><b>Popularne Zakłady</b></p>
@@ -23,10 +23,8 @@
         </div>
 
 
-        <div class="content border col-4  ">
-            <div>
+        <div class="content col-4">
                 <p class="text-center"><b>Lista zakładów</b></p>
-            </div>
             <div th:each="game : ${listOfAvailableGames}">
                 <form class="row" name="bet-form" th:object="${betGame}" action="/addBet" method="post"
                       onsubmit="Disable">
@@ -38,8 +36,7 @@
                         <input th:if="*{betId > 0}" th:value="*{betId}" th:name="betId">
                     </div>
                     <div>
-                        <table class="table border-radius table-primary">
-
+                        <table class="table table-primary">
                             <tr>
                                 <th class="align-middle" rowspan="2"
                                     th:text="|${game.nameOfTeamA} VS ${game.nameOfTeamB}|"></th>
@@ -76,69 +73,57 @@
                                 </th>
                             </tr>
                         </table>
-                        <script>
-                            $('input[name=options-outlined]').on('change', function () {
-                                $(this).closest("form").submit();
-                            });
-                        </script>
                     </div>
                 </form>
             </div>
         </div>
 
         <div class="content col-4">
-            <p class="text-center"><b>KUPONY</b></p>
 
-            <div>
+            <p class="text-center"><b>Zakład</b></p>
 
-                <div th:if="${bet}" th:object="${bet}">
-                    <p th:if="*{account}" th:text="|Konto numer: *{account}|"></p>
-                    <p class="text-center" style="color: red" th:unless="*{account}">Kupon nieprzypisany do konta</p>
+
+            <div th:if="${betCouponGamesList}">
+                <div th:if="${betCouponGamesList}"  th:each="betGame : ${betCouponGamesList}" th:object="${betGame}">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>
+                                <p class="text-center" th:text="|*{gameTitle}   Kurs: *{winRate}|"></p>
+                            </th>
+                            <th>
+                                <a class="mr-4" th:href="|/remove?betByGameId=${betGame.getGameId()}|"
+                                   style="color: red">Usuń</a>
+                            </th>
+                        </tr>
+                    </table>
+
                 </div>
-
-                <div th:if="${betCouponGamesList}">
-                    <p class="text-center"><b>Zakłady</b></p>
-
-                    <div class="" th:each="betGame : ${betCouponGamesList}" th:object="${betGame}">
-                        <table class="table table-striped">
-                            <tr>
-                                <th>
-                                    <p class="text-center" th:text="|*{gameTitle}   Kurs: *{winRate}|"></p>
-                                </th>
-                                <th>
-                                    <a class="mr-4"
-                                       th:href="|/remove?bet_game_id=${betGame.getId()}&bet_id=${bet.getBetId()}|"
-                                       style="color: red">Usuń</a>
-                                </th>
-                            </tr>
-                        </table>
-
+                <p class="text-end" th:if="${toWin}" th:text="|Do wygrania: ${toWin}zł|"></p>
+                <form method="post" action="/addBet" th:object="${bet}">
+                    <input hidden="hidden" th:value="*{betId}" th:name="betId">
+                    <div class="input-group ">
+                        <span class="input-group-text" id="basic-addon1">Stawka:</span>
+                        <input type="number" class="form-control" placeholder="wpisz kwotę aby obstawić zakład"
+                               aria-label="Username"
+                               aria-describedby="basic-addon1" id="money" th:field="*{betMoney}"
+                               onchange="this.form.submit()" required>
+                        <input type="button" onclick="location.href='/save_coupon'"
+                               value="Dodaj zakład">
                     </div>
-                    <p class="text-end" th:if="${toWin}" th:text="|Do wygrania: ${toWin}zł|"></p>
-                    <form method="post" action="/addBet" th:object="${bet}">
-                        <input hidden="hidden" th:value="*{betId}" th:name="betId">
-                        <div class="input-group ">
-                            <span class="input-group-text" id="basic-addon1">Stawka:</span>
-                            <input type="number" class="form-control" placeholder="wpisz kwotę" aria-label="Username"
-                                   aria-describedby="basic-addon1"
-                                   id="money" th:field="*{betMoney}" onchange="this.form.submit()">
-                        </div>
-
-
-                    </form>
-
-                </div>
+                </form>
             </div>
-
         </div>
-        <script>
-            $('input[id=money]').on('change', function () {
-                $(this).closest("form").submit();
-            });
-        </script>
-
     </div>
+
 </main>
 </body>
+<script>
+    $('input[name=options-outlined]').on('change', function () {
+        $(this).closest("form").submit();
+    });
+    $('input[id=money]').on('change', function () {
+        $(this).closest("form").submit();
+    });
+</script>
 
 </html>

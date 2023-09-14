@@ -1,6 +1,6 @@
 package com.tema26cwicz1.bet;
 
-import com.tema26cwicz1.account.Account;
+import com.tema26cwicz1.betgame.BetGame;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -11,11 +11,10 @@ import java.util.List;
 public class Bet {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long betId;
     private BigDecimal betMoney;
-    @ManyToOne
-    private Account account;
+    private BigDecimal earned;
     @OneToMany(mappedBy = "bet", orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<BetGame> betGames = new ArrayList<>();
 
@@ -38,20 +37,20 @@ public class Bet {
         this.betMoney = betMoney;
     }
 
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
     public List<BetGame> getBetGames() {
         return betGames;
     }
 
     public void setBetGames(List<BetGame> betGames) {
         this.betGames = betGames;
+    }
+
+    public BigDecimal getEarned() {
+        return earned;
+    }
+
+    public void setEarned(BigDecimal earned) {
+        this.earned = earned;
     }
 }
 

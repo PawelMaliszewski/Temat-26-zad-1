@@ -1,8 +1,9 @@
 package com.tema26cwicz1.appservice;
 
 import com.tema26cwicz1.Result.GameResult;
-import com.tema26cwicz1.account.AccountRepository;
 import com.tema26cwicz1.bet.*;
+import com.tema26cwicz1.betgame.BetGame;
+import com.tema26cwicz1.betgame.BetGameRepository;
 import com.tema26cwicz1.game.Game;
 import com.tema26cwicz1.game.GameRepository;
 import org.springframework.stereotype.Service;
@@ -15,16 +16,13 @@ import java.util.stream.Collectors;
 @Service
 public class AppService {
 
-    private final AccountRepository accountRepository;
-
     private final BetRepository betRepository;
 
     private final BetGameRepository betGameRepository;
 
     private final GameRepository gameRepository;
 
-    public AppService(AccountRepository accountRepository, BetRepository betRepository, BetGameRepository betGameRepository, GameRepository gameRepository) {
-        this.accountRepository = accountRepository;
+    public AppService(BetRepository betRepository, BetGameRepository betGameRepository, GameRepository gameRepository) {
         this.betRepository = betRepository;
         this.betGameRepository = betGameRepository;
         this.gameRepository = gameRepository;
@@ -52,7 +50,7 @@ public class AppService {
                 .entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .map(Map.Entry::getKey)
-                .limit(4)
+                .limit(2)
                 .toList();
         return gameRepository.findAllById(collectList);
     }
@@ -71,27 +69,28 @@ public class AppService {
         return game.getDrawRate();
     }
 
-    public List<Game> onlyUnselectedGames(Long betId) {
+    public List<Game> onlyUnselectedGames(List<BetGame> betGameList) {
         List<Game> gamesLeft = gameRepository.findAll();
-        List<Game> betGames = new ArrayList<>();
-        Bet bet = betRepository.findById(betId).get();
-        for (BetGame betGame : bet.getBetGames()) {
-            betGames.add(gameRepository.findById(betGame.getGameId()).get());
+        List<Game> gamesAddedToBetCoupon = new ArrayList<>();
+        for (BetGame betGame : betGameList) {
+            gamesAddedToBetCoupon.add(gameRepository.findById(betGame.getGameId()).get());
         }
-        gamesLeft.removeAll(betGames);
+        gamesLeft.removeAll(gamesAddedToBetCoupon);
         System.out.println();
         return gamesLeft;
     }
 
-    public BigDecimal toWin(Bet bet, BigDecimal betAmount) {
-        BigDecimal winRateSum = new BigDecimal("0.00");
-        List<BetGame> betGamesByBet = betGameRepository.findBetGamesByBet(bet);
-        for (BetGame betGame : betGamesByBet) {
-            winRateSum = winRateSum.add(BigDecimal.valueOf(betGame.getWinRate()));
+    public BigDecimal toWin(BigDecimal betAmount, List<BetGame> betGameList) {
+        if (Double.parseDouble(betAmount.toString()) > 0) {
+            BigDecimal winRateSum = new BigDecimal("0.00");
+            for (BetGame betGame : betGameList) {
+                winRateSum = winRateSum.add(BigDecimal.valueOf(betGame.getWinRate()));
+            }
+            BigDecimal sum = betAmount.multiply((betGameList.size() == 1) ?
+                    winRateSum : winRateSum.multiply(new BigDecimal("0.84")));
+            return sum.setScale(2, RoundingMode.CEILING);
         }
-        BigDecimal sum = bet.getBetMoney().multiply((betGamesByBet.size() == 1) ?
-                winRateSum : winRateSum.multiply(new BigDecimal("0.84")));
-        return (betAmount.intValue() > 0) ? sum.setScale(2, RoundingMode.CEILING) : new BigDecimal("0");
+        return new BigDecimal("0");
     }
 }
 

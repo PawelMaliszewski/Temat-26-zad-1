@@ -1,8 +1,6 @@
 package com.tema26cwicz1.controllers;
 
 import com.tema26cwicz1.Result.GameResult;
-import com.tema26cwicz1.bet.Bet;
-import com.tema26cwicz1.bet.BetGame;
 import com.tema26cwicz1.game.Game;
 import com.tema26cwicz1.game.GameRepository;
 import org.springframework.stereotype.Controller;
@@ -11,19 +9,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 @Controller
-public class GameController {
+public class BetGameController {
 
     private final GameRepository gameRepository;
 
-    public GameController(GameRepository gameRepository) {
+    public BetGameController(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
     }
 
