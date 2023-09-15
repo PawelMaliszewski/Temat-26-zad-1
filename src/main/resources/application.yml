@@ -9,3 +9,5 @@ spring:
           import_files_sql_extractor: org.hibernate.tool.schema.internal.script.MultiLineSqlScriptExtractor
           auto: create
         format_sql: true
+        show_sql: true
+        use_sql_comments: true

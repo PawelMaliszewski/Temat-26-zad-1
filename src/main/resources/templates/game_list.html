@@ -36,30 +36,23 @@
                 <td class="text-center align-middle" th:text="*{drawRate}">a</td>
                 <td class="text-center align-middle" th:text="*{teamBWinRate}">a</td>
                 <td class="text-center align-middle" th:text="*{gameResult.getDescription()}">a</td>
-                <td class="hstack align-middle">
-
-
+                <td th:if="*{gameResult.name() != 'WAITING'}" class="hstack align-middle">Gra zakończona</td>
+                <td th:if="*{gameResult.name() == 'WAITING'}" class="hstack align-middle">
                     <form action="/add_edit" method="post" th:object="${Long}">
                         <input hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
                         <button type="submit" class="btn btn-primary me-2">Edytuj</button>
                     </form>
-
-
                     <form action="/delete_game" method="post" th:object="${Long}">
                         <input hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
                         <button type="submit" class="btn btn-danger me-2"
                                 onclick="return confirm('Czy na pewno chcesz usunąć ten mecz')">Usuń
                         </button>
                     </form>
-
                     <form action="/random_result" method="post" th:object="${Long}">
                         <input hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
                         <button type="submit" class="btn btn-success">Wylosuj wynik</button>
                     </form>
-
-
                 </td>
-
             </tr>
 
             </tbody>

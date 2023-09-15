@@ -12,9 +12,9 @@
 <main layout:fragment="content">
 
 
-    <div class="container d-flex flex-wrap justify-content-evenly">
+    <div class="container d-flex justify-content-evenly">
 
-        <div class="content col-3">
+        <div class="content col m-2">
             <p class="text-center"><b>Popularne Zakłady</b></p>
             <div th:each="game: ${top4GamesList}" th:object="${game}">
                 <p th:text="|*{nameOfTeamA} vs *{nameOfTeamB}|"
@@ -23,11 +23,10 @@
         </div>
 
 
-        <div class="content col-4">
-                <p class="text-center"><b>Lista zakładów</b></p>
+        <div class="content col m-2">
+                <p class="text-center"><b>Lista meczów</b></p>
             <div th:each="game : ${listOfAvailableGames}">
-                <form class="row" name="bet-form" th:object="${betGame}" action="/addBet" method="post"
-                      onsubmit="Disable">
+                <form class="row" name="bet-form" th:object="${betGame}" action="/addBet" method="post">
                     <div>
                         <input type="number" hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
                     </div>
@@ -78,7 +77,7 @@
             </div>
         </div>
 
-        <div class="content col-4">
+        <div class="content col m-2">
 
             <p class="text-center"><b>Zakład</b></p>
 
@@ -96,18 +95,18 @@
                             </th>
                         </tr>
                     </table>
-
                 </div>
-                <p class="text-end" th:if="${toWin}" th:text="|Do wygrania: ${toWin}zł|"></p>
+                <p class="text-end" th:text="|Łączna stawka: ${bet.getRate()}|">sdasda</p>
+                <p class="text-end" th:if="${bet.betMoney}" th:text="|Do wygrania: ${bet.getMoneyToWin()}zł|"></p>
                 <form method="post" action="/addBet" th:object="${bet}">
                     <input hidden="hidden" th:value="*{betId}" th:name="betId">
                     <div class="input-group ">
                         <span class="input-group-text" id="basic-addon1">Stawka:</span>
-                        <input type="number" class="form-control" placeholder="wpisz kwotę aby obstawić zakład"
+                        <input type="number" class="form-control" placeholder="wpisz kwotę aby moc obstawić zakład"
                                aria-label="Username"
                                aria-describedby="basic-addon1" id="money" th:field="*{betMoney}"
                                onchange="this.form.submit()" required>
-                        <input type="button" onclick="location.href='/save_coupon'"
+                        <input th:if="*{betMoney}" type="button" onclick="location.href='/save_coupon'"
                                value="Dodaj zakład">
                     </div>
                 </form>

@@ -1,6 +1,3 @@
-
-
-
 INSERT INTO GAME(NAME_OF_TEAMA, NAME_OF_TEAMB , TEAMAWIN_RATE, TEAMBWIN_RATE, DRAW_RATE, GAME_RESULT)
 VALUES
     ('Drużyna A', 'Drużyna B', '1.14', '3.5', '2', 'WAITING'),
@@ -13,15 +10,14 @@ VALUES
     ('Drużyna Z', 'Drużyna N', '1.22', '6.5', '13', 'WAITING'),
     ('Drużyna X', 'Drużyna L', '1.45', '4.5', '7.25', 'WAITING');
 
-INSERT INTO BET(BET_MONEY, BET_ID)
+INSERT INTO BET(BET_MONEY, MONEY_TO_WIN, NOT_ACTIVE, RATE)
 VALUES
-    ('100', '1'),
-    ('55.50', '2'),
-    ('60', '3'),
-    ('5', '4'),
-    ('12', '5'),
-    ('100000', '6');
-
+    ('100', '276', '0', '2.14'),
+    ('55.50', '129.87', '0', '2.14'),
+    ('60', '168.00zł', '0', '2.14'),
+    ('53', '392.20', '0', '2.14'),
+    ('12', '156', '0', '2.14'),
+    ('100000', '878000', '0', '2.14');
 
 INSERT INTO BET_GAME (BET_ID, GAME_ID, GAME_RESULT,  GAME_TITLE, WIN_RATE)
 VALUES

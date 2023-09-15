@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title >!!! UWAGA !!!</title>
+
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="d-flex flex-column text-center">
+        <h1 style="color: red">!!! UWAGA !!!</h1>
+        <h2 style="color: red">USUNIĘCIE MECZU SPOWODUJE ZMIANĘ AKTUALNYCH ZAKŁADÓW LUB ICH CAŁKOWITE USUNIĘCIE</h2>
+        <br>
+        <form action="/delete_game"  method="post">
+            <input hidden="hidden" th:value="yes" th:name="yes">
+            <input hidden="hidden" th:value="${gameId}" th:name="gameId">
+            <button type="submit" class="btn btn-danger me-2"
+                    onclick="return confirm('! CZY NA PEWNO CHCESZ TO ZROBIĆ !')">Usuń
+            </button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

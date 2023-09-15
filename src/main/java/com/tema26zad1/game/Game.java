@@ -1,6 +1,6 @@
-package com.tema26cwicz1.game;
+package com.tema26zad1.game;
 
-import com.tema26cwicz1.Result.GameResult;
+import com.tema26zad1.Result.GameResult;
 import jakarta.persistence.*;
 
 @Entity
