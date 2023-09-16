@@ -3,7 +3,6 @@ package com.tema26zad1.bet;
 import com.tema26zad1.betgame.BetGame;
 import jakarta.persistence.*;
 import org.hibernate.type.NumericBooleanConverter;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;

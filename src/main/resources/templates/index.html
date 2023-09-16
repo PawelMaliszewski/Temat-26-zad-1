@@ -6,14 +6,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Strona główna</title>
-
 </head>
 <body>
 <main layout:fragment="content">
-
-
     <div class="container d-flex justify-content-evenly">
-
         <div class="content col m-2">
             <p class="text-center"><b>Popularne Zakłady</b></p>
             <div th:each="game: ${top4GamesList}" th:object="${game}">
@@ -21,8 +17,6 @@
                    class="blink border rounded alert-warning text-center"></p>
             </div>
         </div>
-
-
         <div class="content col m-2">
                 <p class="text-center"><b>Lista meczów</b></p>
             <div th:each="game : ${listOfAvailableGames}">
@@ -76,12 +70,9 @@
                 </form>
             </div>
         </div>
-
         <div class="content col m-2">
-
             <p class="text-center"><b>Zakład</b></p>
-            <p class="text-center" th:if="${bet.getBetGames().isEmpty()}">Kliknij stawkę, aby dodać zakład</p>
-
+            <p class="text-center" th:if="${bet.getBetGames().isEmpty()}">Kliknij kurs meczu, aby dodać pozycję.</p>
             <div th:if="${betCouponGamesList}">
                 <div th:if="${betCouponGamesList}" th:each="betGame : ${betCouponGamesList}" th:object="${betGame}">
                     <table class="table table-striped">
@@ -90,7 +81,7 @@
                                 <p class="text-center" th:text="|*{gameTitle}   Kurs: *{winRate}|"></p>
                             </th>
                             <th>
-                                <a class="mr-4" th:href="|/remove?betByGameId=${betGame.getGameId()}|"
+                                <a class="mr-4" th:href="|/remove?betByGameId=${betGame.gameId}|"
                                    style="color: red">Usuń</a>
                             </th>
                         </tr>
@@ -113,7 +104,6 @@
             </div>
         </div>
     </div>
-
 </main>
 </body>
 <script>
@@ -124,5 +114,4 @@
         $(this).closest("form").submit();
     });
 </script>
-
 </html>

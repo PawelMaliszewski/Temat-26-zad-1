@@ -46,7 +46,9 @@ public class AppService {
 
     public List<Game> fourMostFrequentBetGames() {
         List<Long> collectList = betGameRepository.findAll()
-                .stream().collect(Collectors.groupingBy(BetGame::getGameId, Collectors.counting()))
+                .stream()
+                .filter(betGame -> gameRepository.findById(betGame.getGameId()).get().getGameResult().equals(GameResult.WAITING))
+                .collect(Collectors.groupingBy(BetGame::getGameId, Collectors.counting()))
                 .entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .map(Map.Entry::getKey)

@@ -1,26 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <title></title>
     <meta charset="UTF-8">
 </head>
 <body>
-
-<div th:fragment="header">
-
-    <div class="header">
-        <h1 class="header-text" >JAVA BET NAJLEPSZE ZAKŁADY</h1>
+    <div th:fragment="header">
+        <div class="header">
+            <h1 class="header-text">JAVA BET NAJLEPSZE ZAKŁADY</h1>
+        </div>
+        <div class="d-flex justify-content-center">
+            <a href="/" class="link-primary p-2">Główna strona</a>
+            <a href="/game_list" class="link-primary p-2">Mecze </a>
+            <a href="/bet_list" class="link-primary p-2">Zakłady</a>
+        </div>
     </div>
-    <div class="d-flex justify-content-center">
-        <a href="/" class="link-primary p-2">Główna strona</a>
-        <a href="/game_list" class="link-primary p-2">Mecze </a>
-        <a href="/bet_list" class="link-primary p-2">Zakłady</a>
+    <div th:fragment="footer">
+        <h5 class="footer ms-5"> Wszelkie Prawa zastrzeżone &copy;</h5>
     </div>
-
-</div>
-<div  th:fragment="footer">
-    <h5 class="footer ms-5"> Wszelkie Prawa zastrzeżone &copy;</h5>
-</div>
-
-
 </body>
 </html>

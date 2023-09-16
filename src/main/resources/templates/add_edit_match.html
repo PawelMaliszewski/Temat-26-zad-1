@@ -7,47 +7,36 @@
 </head>
 <body>
 <main layout:fragment="content">
-
     <div  class="container">
         <h2 style="margin-top: 25px" th:text="(${game.gameId != null}) ? 'Edytuj mecz' : 'Dodaj mecz'"></h2>
-
         <form action="/save_game" th:object="${game}" method="post">
-
             <input th:if="*{gameId != null}" type="hidden" th:field="*{gameId}">
-
             <div class="mb-3">
                 <label for="team_a" class="form-label">Nazwa drużyny gospodarzy</label>
                 <input type="text" th:field="*{nameOfTeamA}" class="form-control" id="team_a"
                        placeholder="drużyna gospodarzy" required></input>
             </div>
-
             <div class="mb-3">
                 <label for="team_b" class="form-label">Nazwa drużyny gości</label>
                 <input type="text" th:field="*{nameOfTeamB}" class="form-control" id="team_b"
                        placeholder="drużyna gości" required></input>
             </div>
-
             <div class="mb-3">
                 <label for="team_a_win_rate" class="form-label">Stawka za wygraną gospodarzy</label>
                 <input type="number" th:field="*{teamAWinRate}" class="form-control w-25" id="team_a_win_rate"
                        placeholder="wpisz stawkę" step="0.01" min="1" required></input>
             </div>
-
             <div class="mb-3">
                 <label for="draw" class="form-label">Stawka za remis</label>
                 <input type="number" th:field="*{drawRate}" class="form-control w-25" id="draw"
                        placeholder="wpisz stawkę" step="0.01" min="1" required></input>
             </div>
-
             <div class="mb-3">
                 <label for="team_b_win_rate" class="form-label">Stawka za wygraną gości</label>
                 <input type="number" th:field="*{teamBWinRate}" class="form-control w-25" id="team_b_win_rate"
                        placeholder="wpisz stawkę" step="0.01" min="1" required></input>
             </div>
-
             <input hidden="hidden" th:if="*{gameId == null}" th:value="'WAITING'" th:name="gameResult">
-
-
             <div th:if="*{gameId != null}">
                 <label for="prodCat">Wybierz typ transakcji</label>
                 <select th:if="game." th:field="*{gameResult}" id="prodCat" class="form-select mb-2 w-25"
@@ -59,8 +48,6 @@
                             th:text="${result.getDescription()}"></option>
                 </select>
             </div>
-
-
             <button type="submit" class="btn btn-primary"
                     th:text="*{gameId == null} ? 'Dodaj mecz' : 'Zapisz zmiany'"></button>
         </form>

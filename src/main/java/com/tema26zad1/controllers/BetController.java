@@ -54,8 +54,6 @@ public class BetController {
     public String addBet(@ModelAttribute BetGame betGame, @ModelAttribute Bet bet) {
         if (bet.getBetMoney() != null) {
             temporaryBet.setBetMoney(bet.getBetMoney());
-        }
-        if (bet.getBetMoney() != null) {
             temporaryBet = appService.toWin(temporaryBet);
         }
         if (betGame.getGameResult() != null) {
