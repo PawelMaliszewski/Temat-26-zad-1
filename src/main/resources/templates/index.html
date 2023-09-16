@@ -80,10 +80,10 @@
         <div class="content col m-2">
 
             <p class="text-center"><b>Zakład</b></p>
-
+            <p class="text-center" th:if="${bet.getBetGames().isEmpty()}">Kliknij stawkę, aby dodać zakład</p>
 
             <div th:if="${betCouponGamesList}">
-                <div th:if="${betCouponGamesList}"  th:each="betGame : ${betCouponGamesList}" th:object="${betGame}">
+                <div th:if="${betCouponGamesList}" th:each="betGame : ${betCouponGamesList}" th:object="${betGame}">
                     <table class="table table-striped">
                         <tr>
                             <th>
@@ -96,13 +96,13 @@
                         </tr>
                     </table>
                 </div>
-                <p class="text-end" th:text="|Łączna stawka: ${bet.getRate()}|">sdasda</p>
+                <p class="text-end" th:text="|Łączny kurs: ${bet.getRate()}|"></p>
                 <p class="text-end" th:if="${bet.betMoney}" th:text="|Do wygrania: ${bet.getMoneyToWin()}zł|"></p>
                 <form method="post" action="/addBet" th:object="${bet}">
                     <input hidden="hidden" th:value="*{betId}" th:name="betId">
                     <div class="input-group ">
-                        <span class="input-group-text" id="basic-addon1">Stawka:</span>
-                        <input type="number" class="form-control" placeholder="wpisz kwotę aby moc obstawić zakład"
+                        <span class="input-group-text" id="basic-addon1">Kwota w zł:</span>
+                        <input type="number" class="form-control" placeholder="wpisz kwotę aby obstawić zakład"
                                aria-label="Username"
                                aria-describedby="basic-addon1" id="money" th:field="*{betMoney}"
                                onchange="this.form.submit()" required>

@@ -1,6 +1,6 @@
 .header {
     border-radius: 10px;
-    margin: 0 50px 50px 50px ;
+    margin: 10px 50px 5px 50px ;
     background: rgb(62, 58, 180);
     background: linear-gradient(90deg, rgb(58, 68, 180) 0%, rgba(253,205,29,1) 50%, rgba(252,176,69,1) 100%)
 }

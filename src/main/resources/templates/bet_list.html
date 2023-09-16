@@ -25,8 +25,11 @@
                                 <td colspan="9" th:text="|${game.gameTitle} Stawka: ${game.winRate}|"></td>
                             </tr>
                         </th:block>
+                        <tr>
+                            <th colspan="8" th:text="|Całkowity kurs dla zakładu: ${bet.getRate()}|"></th>
+                        </tr>
                         <tr >
-                            <th  class=" w-50" colspan="4" th:text="|Kwota zakladu: ${bet.betMoney}|"></th>
+                            <th  class=" w-50" colspan="4" th:text="|Stawka: ${bet.betMoney}|"></th>
                             <th:block th:unless="${bet.notActive}">
                                 <th colspan="4" th:if="${bet.moneyToWin > 0}" th:text="|Do wygrania: ${bet.moneyToWin}|"></th>
                             </th:block>

@@ -14,7 +14,7 @@
             <thead class="">
             <tr>
                 <th class="text-center align-middle" colspan="2">Drużyna</th>
-                <th class="text-center align-middle" colspan="3">Stawka</th>
+                <th class="text-center align-middle" colspan="3">Kurs</th>
                 <th class="text-center align-middle" rowspan="2">Wynik</th>
                 <th class="text-center align-middle" rowspan="2">Opcje</th>
             </tr>
@@ -36,22 +36,25 @@
                 <td class="text-center align-middle" th:text="*{drawRate}">a</td>
                 <td class="text-center align-middle" th:text="*{teamBWinRate}">a</td>
                 <td class="text-center align-middle" th:text="*{gameResult.getDescription()}">a</td>
-                <td th:if="*{gameResult.name() != 'WAITING'}" class="hstack align-middle">Gra zakończona</td>
-                <td th:if="*{gameResult.name() == 'WAITING'}" class="hstack align-middle">
-                    <form action="/add_edit" method="post" th:object="${Long}">
-                        <input hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
-                        <button type="submit" class="btn btn-primary me-2">Edytuj</button>
-                    </form>
+                <td class="hstack align-middle">
+                    <th:block th:if="*{gameResult.name() == 'WAITING'}">
+                        <form action="/add_edit" method="post" th:object="${Long}">
+                            <input hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
+                            <button type="submit" class="btn btn-primary me-2">Edytuj</button>
+                        </form>
+                    </th:block>
                     <form action="/delete_game" method="post" th:object="${Long}">
                         <input hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
                         <button type="submit" class="btn btn-danger me-2"
                                 onclick="return confirm('Czy na pewno chcesz usunąć ten mecz')">Usuń
                         </button>
                     </form>
-                    <form action="/random_result" method="post" th:object="${Long}">
-                        <input hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
-                        <button type="submit" class="btn btn-success">Wylosuj wynik</button>
-                    </form>
+                    <th:block th:if="*{gameResult.name() == 'WAITING'}">
+                        <form action="/random_result" method="post" th:object="${Long}">
+                            <input hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
+                            <button type="submit" class="btn btn-success">Wylosuj wynik</button>
+                        </form>
+                    </th:block>
                 </td>
             </tr>
 

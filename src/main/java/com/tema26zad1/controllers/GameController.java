@@ -45,12 +45,12 @@ public class GameController {
     public String deleteGame(@RequestParam Long gameId, @RequestParam(required = false) String yes, RedirectAttributes ra) {
         if (gameId != null) {
             List<BetGame> betGamesByGameId = betGameRepository.findAllByGameId(gameId);
+            boolean isThereAnyActiveBetForThisGame = betGamesByGameId.stream().noneMatch(betGame -> betGame.getBet().isNotActive());
             if (betGamesByGameId.isEmpty()) {
                 betGameRepository.deleteById(gameId);
             } else {
-                boolean isThereAnyActiveBetForThisGame = betGamesByGameId.stream().noneMatch(betGame -> betGame.getBet().isNotActive());
                 if (!isThereAnyActiveBetForThisGame) {
-                    appService.deleteGameAndBetAndBetGamesRelatedToGameId(gameId, betGamesByGameId);
+                    gameRepository.deleteById(gameId);
                     return "redirect:/game_list";
                 } else {
                     if (yes == null) {
@@ -67,34 +67,22 @@ public class GameController {
     }
 
     @GetMapping("/warning")
-    private String test(@RequestParam  Long gameId, Model model) {
+    private String test(@RequestParam Long gameId, Model model) {
         model.addAttribute("gameId", gameId);
         return "warning";
     }
 
     @PostMapping("/add_edit")
     public String editGame(@RequestParam(required = false) Long gameId, Model model) {
-        Game game = null;
         if (gameId != null) {
             Optional<Game> optionalGame = gameRepository.findById(gameId);
             if (optionalGame.isPresent()) {
-                game = optionalGame.get();
+                Game game = optionalGame.get();
+                appService.updateBets(game);
                 model.addAttribute("game", game);
-                List<Bet> betListIncludingEditedGame = betRepository.findAllById(
-                        betGameRepository.findAllByGameId(gameId).stream()
-                                .map(betGame -> betGame.getBet().getBetId()).toList());
-                for (Bet bet : betListIncludingEditedGame) {
-                    bet = appService.toWin(bet, bet.getBetGames());
-                    for (BetGame betGame : bet.getBetGames()) {
-                        if (betGame.getGameId().equals(gameId)) {
-                            betGame.setWinRate(appService.findWinRate(betGame, game));
-                        }
-                    }
-                    betRepository.save(bet);
-                }
+            } else {
+                model.addAttribute("game", new Game());
             }
-        } else {
-            model.addAttribute("game", new Game());
         }
         return "/add_edit_match";
     }
@@ -102,6 +90,7 @@ public class GameController {
     @PostMapping("/save_game")
     public String saveGame(@ModelAttribute Game game, Model model) {
         gameRepository.save(game);
+        appService.updateBets(game);
         model.addAttribute("gameList", gameRepository.findAll());
         return "redirect:/game_list";
     }
@@ -116,6 +105,7 @@ public class GameController {
                 Game game = optionalGame.get();
                 game.setGameResult(gameResult);
                 gameRepository.saveAndFlush(optionalGame.get());
+                appService.updateBets(game);
             }
         }
         model.addAttribute("gameList", gameRepository.findAll());

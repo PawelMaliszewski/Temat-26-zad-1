@@ -27,7 +27,6 @@ public class BetController {
     private final GameRepository gameRepository;
     @PersistenceContext
     public EntityManager entityManager;
-    private List<BetGame> temporaryBetGameList = new ArrayList<>();
     private Bet temporaryBet = new Bet();
 
     public BetController(AppService appService, BetGameRepository betGameRepository, BetRepository betRepository, GameRepository gameRepository) {
@@ -39,15 +38,15 @@ public class BetController {
 
     @GetMapping("/")
     public String home(Model model) {
-        if (!temporaryBetGameList.isEmpty()) {
-            model.addAttribute("betCouponGamesList", temporaryBetGameList);
-            model.addAttribute("listOfAvailableGames", appService.onlyUnselectedGames(temporaryBetGameList));
+        if (!temporaryBet.getBetGames().isEmpty()) {
+            model.addAttribute("betCouponGamesList", temporaryBet.getBetGames());
+            model.addAttribute("listOfAvailableGames", appService.onlyUnselectedGames(temporaryBet.getBetGames()));
         } else {
             model.addAttribute("listOfAvailableGames", appService.gamesForBet(gameRepository.findAll()));
         }
         model.addAttribute("bet", temporaryBet);
         model.addAttribute("top4GamesList", appService.fourMostFrequentBetGames());
-        System.out.println();
+        model.addAttribute("betGame", new BetGame());
         return "index";
     }
 
@@ -57,23 +56,22 @@ public class BetController {
             temporaryBet.setBetMoney(bet.getBetMoney());
         }
         if (bet.getBetMoney() != null) {
-            temporaryBet = appService.toWin(temporaryBet, temporaryBetGameList);
+            temporaryBet = appService.toWin(temporaryBet);
         }
         if (betGame.getGameResult() != null) {
-            temporaryBetGameList.add(betGame);
+            temporaryBet.getBetGames().add(betGame);
             betGame.setBet(temporaryBet);
             betGame.setWinRate(appService.findWinRate(betGame, gameRepository.findById(betGame.getGameId()).get()));
-            temporaryBet = appService.toWin(temporaryBet, temporaryBetGameList);
+            temporaryBet = appService.toWin(temporaryBet);
         }
-        System.out.println();
         return "redirect:/";
     }
 
     @GetMapping("/remove")
     public String remove(@RequestParam(required = false) Long betByGameId) {
-        temporaryBetGameList.removeIf(betGame -> betGame.getGameId().equals(betByGameId));
+        temporaryBet.getBetGames().removeIf(betGame -> betGame.getGameId().equals(betByGameId));
         if (!betGameRepository.findAll().isEmpty()) {
-            temporaryBet = appService.toWin(temporaryBet, temporaryBetGameList);
+            temporaryBet = appService.toWin(temporaryBet);
         }
         return "redirect:/";
     }
@@ -81,15 +79,12 @@ public class BetController {
     @GetMapping("/save_coupon")
     public String saveCoupon() {
         betRepository.save(temporaryBet);
-        betGameRepository.saveAll(temporaryBetGameList);
         temporaryBet = new Bet();
-        temporaryBetGameList = new ArrayList<>();
         return "redirect:/";
     }
 
     @GetMapping("bet_list")
     public String betList(Model model) {
-        appService.updateBets();
         model.addAttribute("betList", betRepository.findAll());
         System.out.println();
         return "bet_list";

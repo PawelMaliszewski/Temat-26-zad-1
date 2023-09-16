@@ -67,15 +67,18 @@ public class AppService {
     public List<Game> onlyUnselectedGames(List<BetGame> betGameList) {
         List<Game> gamesLeft = gameRepository.findAll();
         List<Game> gamesAddedToBetCoupon = new ArrayList<>();
-        for (BetGame betGame : betGameList) {
-            gamesAddedToBetCoupon.add(gameRepository.findById(betGame.getGameId()).get());
+        if (!betGameList.isEmpty()) {
+            for (BetGame betGame : betGameList) {
+                gamesAddedToBetCoupon.add(gameRepository.findById(betGame.getGameId()).get());
+            }
         }
         gamesLeft.removeAll(gamesAddedToBetCoupon);
         System.out.println();
         return gamesLeft;
     }
 
-    public Bet toWin(Bet bet, List<BetGame> betGameList) {
+    public Bet toWin(Bet bet) {
+        List<BetGame> betGameList = bet.getBetGames();
         double winRateSum = betGameList.stream().mapToDouble(BetGame::getWinRate).sum();
         winRateSum = (betGameList.size() == 1) ? winRateSum : winRateSum * 0.84;
         BigDecimal bigWinRate = new BigDecimal(winRateSum).setScale(2, RoundingMode.CEILING);
@@ -87,7 +90,19 @@ public class AppService {
         return bet;
     }
 
-    public void updateBets() {
+    public void updateBets(Game game) {
+        List<Bet> betListIncludingEditedGame = betRepository.findAllById(
+                betGameRepository.findAllByGameId(game.getGameId()).stream()
+                        .map(betGame -> betGame.getBet().getBetId()).toList());
+        for (Bet bet : betListIncludingEditedGame) {
+            for (BetGame betGame : bet.getBetGames()) {
+                if (betGame.getGameId().equals(game.getGameId())) {
+                    betGame.setWinRate(findWinRate(betGame, game));
+                }
+            }
+            bet = toWin(bet);
+            betRepository.save(bet);
+        }
         for (Bet bet : betRepository.findAll()) {
             if (!bet.isNotActive()) {
                 List<BetGame> allGamesByBetBetId = betGameRepository.findAllByBet_BetId(bet.getBetId());
@@ -120,7 +135,7 @@ public class AppService {
             for (BetGame betGame : betGamesByGameId) {
                 Bet bet = betRepository.findById(betGame.getBet().getBetId()).get();
                 bet.getBetGames().remove(betGame);
-                bet = toWin(bet, bet.getBetGames());
+                bet = toWin(bet);
                 betRepository.save(bet);
             }
         }
