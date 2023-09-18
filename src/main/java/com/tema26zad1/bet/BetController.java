@@ -62,7 +62,7 @@ public class BetController {
             for (Game game : listOfEndedGames) {
                 temporaryBet.getTempBetGames().removeIf(tempBetGame -> tempBetGame.getGameId().equals(game.getGameId()));
             }
-            String thereAreEndedGames = "Nie udało sie dodać zakładu niektóre gry sie skończyły";
+            String thereAreEndedGames = "Nie udało się dodać zakładu niektóre gry się skończyły.";
             ra.addAttribute("thereAreEndedGames", thereAreEndedGames);
         }
         return "redirect:/";
