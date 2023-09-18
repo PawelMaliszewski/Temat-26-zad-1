@@ -45,6 +45,10 @@ public class BetService {
         return betRepository.findAll();
     }
 
+    public BetRepository getBetRepository() {
+        return betRepository;
+    }
+
     public double findWinRate(TempBetGame tempBetGame, BetGame betGame, Game game) {
         BetGame betGame1 = (tempBetGame == null) ? betGame : convertToBetGame(tempBetGame);
         if (betGame1.getGameResult().name().equals("TEAM_A_WON")) {
@@ -81,7 +85,7 @@ public class BetService {
         return bet;
     }
 
-    public void updateBets(@NotNull Game game) {
+    public void updateBetsThatAreContainThisGame(@NotNull Game game) {
         List<Bet> betListIncludingEditedGame = betRepository.findAllById(
                 betGameRepository.findAllByGameId(game.getGameId()).stream()
                         .map(betGame -> betGame.getBet().getBetId()).toList());

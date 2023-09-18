@@ -5,14 +5,23 @@
       layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
-    <title th:text="|Dodano zakład numer: ${bet.betId}|"></title>
+    <title  th:text="(${bet})? 'Dodano zakład' : 'Wyszukaj zaklad'"></title>
 </head>
 <body>
 <main layout:fragment="content">
-    <div class="container d-flex flex-wrap justify-content-evenly">
-        <th:block th:object="${bet}">
-
-            <div class="container col-3 m-2 ">
+    <div class="container">
+        <div class="d-flex justify-content-center col-xs-12 text-center">
+            <h3 style="color: red" th:text="${notFound}"></h3>
+        </div>
+        <div th:unless="${bet}" class="d-flex justify-content-center col-xs-12 text-center">
+            <form action="/find_bet?betId=" method="get" th:object="${Long}">
+                <label for="betId" class="form-label text-center"></label>
+                <input id="betId" name="betId" type="number" step="1">
+                <button type="submit" class="btn btn-success text-center">Wyszukaj zakład</button>
+            </form>
+        </div>
+        <th:block th:if="${bet != null}" th:object="${bet}">
+            <div class="d-flex justify-content-center col-xs-12 text-center">
                 <div>
                     <h2 class="text-center" style="color: green"> Zakład dodany prawidłowo</h2>
                     <br>
@@ -52,3 +61,4 @@
 </main>
 </body>
 </html>
+

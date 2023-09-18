@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class BetController {
@@ -56,8 +57,7 @@ public class BetController {
             Bet bet = betService.convertToBetGame(temporaryBet);
             betService.saveBet(bet);
             temporaryBet.clear();
-            model.addAttribute("bet", bet);
-            return "bet_added";
+            return "redirect:bet" + "?betId=" + bet.getBetId();
         } else {
             for (Game game : listOfEndedGames) {
                 temporaryBet.getTempBetGames().removeIf(tempBetGame -> tempBetGame.getGameId().equals(game.getGameId()));
@@ -66,6 +66,16 @@ public class BetController {
             ra.addAttribute("thereAreEndedGames", thereAreEndedGames);
         }
         return "redirect:/";
+    }
+
+    @GetMapping({"/bet", "/find_bet"})
+    public String betAdded(@RequestParam(required = false) Long betId, Model model) {
+        if (betId != null) {
+            Optional<Bet> betById = betService.getBetRepository().findById(betId);
+            betById.ifPresentOrElse(bet -> model.addAttribute("bet", bet),
+                    () -> model.addAttribute("notFound", "Nie znaleziono zakładu o Id:" + ((betId != null) ? betId : "")));
+        }
+        return "bet";
     }
 
     @PostMapping("/addBetGame")

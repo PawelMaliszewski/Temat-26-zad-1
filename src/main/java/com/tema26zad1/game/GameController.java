@@ -85,7 +85,7 @@ public class GameController {
     @PostMapping("/save_game")
     public String saveGame(@ModelAttribute Game game, Model model) {
         gameService.saveGame(game);
-        betService.updateBets(game);
+        betService.updateBetsThatAreContainThisGame(game);
         model.addAttribute("gameList", gameService.findAllGames());
         return "redirect:/game_list";
     }
@@ -99,7 +99,7 @@ public class GameController {
             if (game != null) {
                 game.setGameResult(gameResult);
                 gameService.saveGame(game);
-                betService.updateBets(game);
+                betService.updateBetsThatAreContainThisGame(game);
             }
         }
         model.addAttribute("gameList", gameService.findAllGames());
