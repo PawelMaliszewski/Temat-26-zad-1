@@ -6,6 +6,7 @@ import com.tema26zad1.appservice.GameService;
 import com.tema26zad1.betgame.TempBetGame;
 import com.tema26zad1.game.Game;
 import jakarta.servlet.http.HttpSession;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,7 @@ public class BetController {
     }
 
     @GetMapping("/")
-    public String home(@RequestParam(name = "thereAreEndedGames", required = false) String thereAreEndedGames, Model model, HttpSession httpSession) {
+    public String home(@RequestParam(name = "thereAreEndedGames", required = false) String thereAreEndedGames, Model model1n) {
         System.out.println();
         if (!temporaryBet.getTempBetGames().isEmpty()) {
             model.addAttribute("betCouponGamesList", temporaryBet.getTempBetGames());
@@ -95,7 +96,7 @@ public class BetController {
 
 
     @GetMapping("bet_list")
-    public String betList(Model model, HttpSession httpSession) {
+    public String betList(@NotNull Model model, HttpSession httpSession) {
         model.addAttribute("betList", betService.findAllBets());
         System.out.println();
         return "bet_list";

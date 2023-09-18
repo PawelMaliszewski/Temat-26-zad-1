@@ -9,12 +9,12 @@ import com.tema26zad1.betgame.BetGameRepository;
 import com.tema26zad1.game.Game;
 import com.tema26zad1.game.GameRepository;
 import com.tema26zad1.game.GameResult;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BetService {
@@ -55,7 +55,7 @@ public class BetService {
         return game.getDrawRate();
     }
 
-    public TemporaryBet toWinTempBet(TemporaryBet temporaryBet) {
+    public TemporaryBet toWinTempBet(@NotNull TemporaryBet temporaryBet) {
         List<TempBetGame> tempoBetGames = temporaryBet.getTempBetGames();
         double winRateSum = tempoBetGames.stream().mapToDouble(TempBetGame::getWinRate).sum();
         winRateSum = (tempoBetGames.size() == 1) ? winRateSum : winRateSum * 0.84;
@@ -68,7 +68,7 @@ public class BetService {
         return temporaryBet;
     }
 
-    public Bet toWin(Bet bet) {
+    public Bet toWin(@NotNull Bet bet) {
         List<BetGame> betGameList = bet.getBetGames();
         double winRateSum = betGameList.stream().mapToDouble(BetGame::getWinRate).sum();
         winRateSum = (betGameList.size() == 1) ? winRateSum : winRateSum * 0.84;
@@ -81,7 +81,7 @@ public class BetService {
         return bet;
     }
 
-    public void updateBets(Game game) {
+    public void updateBets(@NotNull Game game) {
         List<Bet> betListIncludingEditedGame = betRepository.findAllById(
                 betGameRepository.findAllByGameId(game.getGameId()).stream()
                         .map(betGame -> betGame.getBet().getBetId()).toList());
@@ -115,7 +115,8 @@ public class BetService {
         }
     }
 
-    private BetGame convertToBetGame(TempBetGame tempBetGame) {
+    @org.jetbrains.annotations.NotNull
+    private BetGame convertToBetGame(@NotNull TempBetGame tempBetGame) {
         BetGame betGame = new BetGame();
         betGame.setGameTitle(tempBetGame.getGameTitle());
         betGame.setGameResult(tempBetGame.getGameResult());
@@ -123,7 +124,7 @@ public class BetService {
         return betGame;
     }
 
-    public Bet convertToBetGame(TemporaryBet temporaryBet) {
+    public Bet convertToBetGame(@NotNull TemporaryBet temporaryBet) {
         Bet bet = new Bet();
         bet.setBetMoney(temporaryBet.getBetMoney());
         bet.setRate(temporaryBet.getRate());

@@ -7,6 +7,7 @@ import com.tema26zad1.betgame.TempBetGame;
 import com.tema26zad1.game.Game;
 import com.tema26zad1.game.GameRepository;
 import com.tema26zad1.game.GameResult;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -41,7 +42,7 @@ public class GameService {
         return gameRepository.findAll();
     }
 
-    public List<Game> onlyUnselectedGames(List<Long> gameIdList) {
+    public List<Game> onlyUnselectedGames(@NotNull List<Long> gameIdList) {
         List<Game> gamesLeft = gameRepository.findAllGamesThatAreNotEnded();
         List<Game> gamesAddedToBetCoupon = new ArrayList<>();
         if (!gameIdList.isEmpty()) {
@@ -71,7 +72,7 @@ public class GameService {
         gameRepository.deleteById(gameId);
     }
 
-    public List<Game> listOfGamesThatAreEnded(TemporaryBet temporaryBet) {
+    public List<Game> listOfGamesThatAreEnded(@NotNull TemporaryBet temporaryBet) {
         List<Game> allGamesById = gameRepository.findAllById(temporaryBet.getTempBetGames().stream().map(TempBetGame::getGameId).toList());
         return allGamesById.stream().filter(game -> !game.getGameResult().equals(GameResult.WAITING)).toList();
     }
