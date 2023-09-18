@@ -3,6 +3,7 @@ package com.tema26zad1.appservice;
 import com.tema26zad1.bet.*;
 import com.tema26zad1.betgame.BetGame;
 import com.tema26zad1.game.GameRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -20,7 +21,7 @@ public class AppService {
         this.betService = betService;
     }
 
-    public void deleteGameAndBetAndBetGamesRelatedToGameId(Long gameId, List<BetGame> betGamesByGameId) {
+    public void deleteGameAndBetAndBetGamesRelatedToGameId(Long gameId, @NotNull List<BetGame> betGamesByGameId) {
         List<BetGame> oneBetGameOnBetList = betGamesByGameId.stream()
                 .filter(betGame -> betRepository.findById(betGame.getBet().getBetId()).get().getBetGames().size() == 1).toList();
         if (!oneBetGameOnBetList.isEmpty()) {

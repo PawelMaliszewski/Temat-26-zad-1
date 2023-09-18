@@ -47,7 +47,9 @@ public class GameService {
         List<Game> gamesAddedToBetCoupon = new ArrayList<>();
         if (!gameIdList.isEmpty()) {
             for (Long id : gameIdList) {
-                gamesAddedToBetCoupon.add(gameRepository.findById(id).get());
+                if (gameRepository.findById(id).isPresent()) {
+                    gamesAddedToBetCoupon.add(gameRepository.findById(id).get());
+                }
             }
         }
         gamesLeft.removeAll(gamesAddedToBetCoupon);
@@ -58,6 +60,7 @@ public class GameService {
     public List<Game> fourMostFrequentBetGames() {
         List<Long> collectList = betGameRepository.findAll()
                 .stream()
+                .filter(betGame -> gameRepository.findById(betGame.getGameId()).isPresent())
                 .filter(betGame -> gameRepository.findById(betGame.getGameId()).get().getGameResult().equals(GameResult.WAITING))
                 .collect(Collectors.groupingBy(BetGame::getGameId, Collectors.counting()))
                 .entrySet().stream()

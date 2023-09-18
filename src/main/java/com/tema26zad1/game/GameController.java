@@ -4,7 +4,6 @@ import com.tema26zad1.appservice.BetService;
 import com.tema26zad1.appservice.GameService;
 import com.tema26zad1.appservice.AppService;
 import com.tema26zad1.betgame.BetGame;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +19,7 @@ import java.util.Random;
 public class GameController {
 
     private final AppService appService;
-
     private final BetService betService;
-
     private final GameService gameService;
 
     public GameController(AppService appService, BetService betService, GameService gameService) {
@@ -38,20 +35,25 @@ public class GameController {
     }
 
     @PostMapping("/delete_game")
-    public String deleteGame(@RequestParam Long gameId, @RequestParam(required = false) String yes, RedirectAttributes ra, HttpSession httpSession) {
+    public String deleteGame(@RequestParam Long gameId, @RequestParam(required = false) String yes, RedirectAttributes ra) {
         if (gameId != null) {
             List<BetGame> betGamesByGameId = betService.findAllByGameId(gameId);
-            boolean isThereAnyActiveBetForThisGame = betGamesByGameId.stream().noneMatch(betGame -> betGame.getBet().isNotActive());
-            if (!isThereAnyActiveBetForThisGame) {
+            if (betGamesByGameId.isEmpty()) {
                 gameService.deleteGameById(gameId);
                 return "redirect:/game_list";
             } else {
-                if (yes == null) {
-                    ra.addAttribute("gameId", gameId);
-                    return "redirect:warning";
-                } else {
-                    appService.deleteGameAndBetAndBetGamesRelatedToGameId(gameId, betGamesByGameId);
+                boolean isThereAnyActiveBetForThisGame = betGamesByGameId.stream().noneMatch(betGame -> betGame.getBet().isNotActive());
+                if (!isThereAnyActiveBetForThisGame) {
+                    gameService.deleteGameById(gameId);
                     return "redirect:/game_list";
+                } else {
+                    if (yes == null) {
+                        ra.addAttribute("gameId", gameId);
+                        return "redirect:warning";
+                    } else {
+                        appService.deleteGameAndBetAndBetGamesRelatedToGameId(gameId, betGamesByGameId);
+                        return "redirect:/game_list";
+                    }
                 }
             }
         }
@@ -59,19 +61,19 @@ public class GameController {
     }
 
     @GetMapping("/warning")
-    private String test(@RequestParam Long gameId, Model model, HttpSession httpSession) {
+    private String test(@RequestParam Long gameId, Model model) {
         model.addAttribute("gameId", gameId);
         return "warning";
     }
 
     @GetMapping("/game/add")
-    public String editGame(Model model, HttpSession httpSession) {
+    public String editGame(Model model) {
         model.addAttribute("game", new Game());
         return "/add_edit_match";
     }
 
     @GetMapping("/game/edit")
-    public String editGame(@RequestParam(required = false, name = "game_id") Long gameId, Model model, HttpSession httpSession) {
+    public String editGame(@RequestParam(required = false, name = "game_id") Long gameId, Model model) {
         if (gameId != null) {
             model.addAttribute("game", gameService.findGameById(gameId));
         } else {
