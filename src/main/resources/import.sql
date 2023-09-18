@@ -10,28 +10,6 @@ VALUES
     ('Drużyna Z', 'Drużyna N', '1.22', '6.5', '13', 'WAITING'),
     ('Drużyna X', 'Drużyna L', '1.45', '4.5', '7.25', 'WAITING');
 
-INSERT INTO BET(BET_MONEY, MONEY_TO_WIN, NOT_ACTIVE, RATE)
-VALUES
-    ('100', '276', '0', '2.04'),
-    ('55.50', '129.87', '0', '2.34'),
-    ('60', '168.00', '0', '2.8'),
-    ('53', '392.20', '0', '7.4'),
-    ('12', '156', '0', '13'),
-    ('100000', '878000', '0', '8.78');
-
-INSERT INTO BET_GAME (BET_ID, GAME_ID, GAME_RESULT,  GAME_TITLE, WIN_RATE)
-VALUES
-    ('1' ,'1' , 'TEAM_A_WON', 'Drużyna A VS Drużyna B', '1.14'),
-    ('1', '2', 'TEAM_A_WON', 'Drużyna C VS Drużyna D', '2.14'),
-    ('2', '3', 'TEAM_A_WON', 'Drużyna Y VS Drużyna R', '1.28'),
-    ('2', '4','TEAM_B_WON', 'Drużyna T VS Drużyna D', '1.8'),
-    ('3', '5','TEAM_B_WON', 'Drużyna P VS Drużyna T', '2.15'),
-    ('4', '6','TEAM_B_WON', 'Drużyna O VS Drużyna H', '2.1'),
-    ('4', '7','TEAM_A_WON', 'Drużyna G VS Drużyna Q', '5.45'),
-    ('5', '8','DRAW', 'Drużyna Z VS Drużyna N', '6.5'),
-    ('6', '9','DRAW', 'Drużyna X VS Drużyna L', '4.5'),
-    ('6', '4', 'TEAM_B_WON', 'Drużyna T VS Drużyna D', '1.8'),
-    ('6', '7', 'DRAW', 'Drużyna G VS Drużyna Q', '3.5');
 
 
 

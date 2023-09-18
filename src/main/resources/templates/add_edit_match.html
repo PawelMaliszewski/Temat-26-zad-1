@@ -43,7 +43,7 @@
                         aria-label="Small select example" required>
                     <option value="">Wybierz kategorie</option>
                     <option name="Stan wyniku"
-                            th:each="result: ${T(com.tema26zad1.Result.GameResult).values()}"
+                            th:each="result: ${T(com.tema26zad1.game.GameResult).values()}"
                             th:value="${result}"
                             th:text="${result.getDescription()}"></option>
                 </select>

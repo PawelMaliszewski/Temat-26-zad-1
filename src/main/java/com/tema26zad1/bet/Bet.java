@@ -17,7 +17,6 @@ public class Bet {
     private BigDecimal earned;
     private Double rate;
     private BigDecimal moneyToWin;
-
     @Convert(converter = NumericBooleanConverter.class)
     private boolean notActive;
     @OneToMany(mappedBy = "bet", orphanRemoval = true, cascade = CascadeType.ALL)

@@ -28,8 +28,8 @@
 
             </tr>
             </thead>
-            <tbody th:each="game: ${gameList}" th:object="${game}">
-            <tr>
+            <tbody >
+            <tr th:each="game: ${gameList}" th:object="${game}">
                 <td class="text-center align-middle" th:text="*{nameOfTeamA}">a</td>
                 <td class="text-center align-middle" th:text="*{nameOfTeamB}">a</td>
                 <td class="text-center align-middle" th:text="*{teamAWinRate}">a</td>
@@ -38,10 +38,7 @@
                 <td class="text-center align-middle" th:text="*{gameResult.getDescription()}">a</td>
                 <td class="hstack align-middle">
                     <th:block th:if="*{gameResult.name() == 'WAITING'}">
-                        <form action="/add_edit" method="post" th:object="${Long}">
-                            <input hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
-                            <button type="submit" class="btn btn-primary me-2">Edytuj</button>
-                        </form>
+                        <a th:href="|/game/edit?game_id=*{gameId}|" class="btn btn-primary">Edytuj</a>
                     </th:block>
                     <form action="/delete_game" method="post" th:object="${Long}">
                         <input hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
@@ -60,9 +57,7 @@
 
             </tbody>
         </table>
-        <form action="/add_edit" method="post">
-            <button class="btn btn-warning" type="submit">Dodaj gre</button>
-        </form>
+            <a href="/game/add" class="btn btn-warning">Dodaj gre</a>
     </div>
 </main>
 </body>

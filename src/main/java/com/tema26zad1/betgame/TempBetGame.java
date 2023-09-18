@@ -1,11 +1,14 @@
 package com.tema26zad1.betgame;
 
 import com.tema26zad1.game.GameResult;
-import com.tema26zad1.bet.Bet;
 import jakarta.persistence.*;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Component;
 
-@Entity
-public class BetGame {
+@Component
+@Scope(scopeName = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class TempBetGame {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,19 +18,8 @@ public class BetGame {
     @Enumerated(EnumType.STRING)
     private GameResult gameResult;
     private double winRate;
-    @ManyToOne
-    @JoinColumn(name = "bet_id")
-    private Bet bet;
 
-    public BetGame() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public TempBetGame() {
     }
 
     public Long getGameId() {
@@ -62,11 +54,4 @@ public class BetGame {
         this.winRate = winRate;
     }
 
-    public Bet getBet() {
-        return bet;
-    }
-
-    public void setBet(Bet bet) {
-        this.bet = bet;
-    }
 }

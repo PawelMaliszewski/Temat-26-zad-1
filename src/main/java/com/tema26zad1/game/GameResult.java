@@ -1,4 +1,4 @@
-package com.tema26zad1.Result;
+package com.tema26zad1.game;
 
 public enum GameResult {
     TEAM_A_WON("drużyna gospodarzy zwyciężyła"), TEAM_B_WON("drużyna gości zwyciężyła"),

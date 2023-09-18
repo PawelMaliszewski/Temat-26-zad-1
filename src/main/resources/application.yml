@@ -1,4 +1,5 @@
 spring:
+  session:
   datasource:
     url: jdbc:h2:mem:test
   jpa:
@@ -11,3 +12,8 @@ spring:
         format_sql: true
         show_sql: true
         use_sql_comments: true
+  data:
+    jpa:
+      repositories:
+        enabled: true
+

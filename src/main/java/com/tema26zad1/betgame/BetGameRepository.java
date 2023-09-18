@@ -10,5 +10,4 @@ public interface BetGameRepository extends JpaRepository<BetGame, Long> {
     List<BetGame> findAllByBet_BetId(Long gameId);
 
     List<BetGame> findAllByGameId(Long gameId);
-
 }
