@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BetService {
@@ -87,6 +88,7 @@ public class BetService {
         for (Bet bet : betListIncludingEditedGame) {
             for (BetGame betGame : bet.getBetGames()) {
                 if (betGame.getGameId().equals(game.getGameId())) {
+                    betGame.setGameTitle(game.getNameOfTeamA() + " VS " + game.getNameOfTeamB());
                     betGame.setWinRate(findWinRate(null, betGame, game));
                 }
             }
@@ -137,7 +139,4 @@ public class BetService {
         }
         return bet;
     }
-
-
-
 }

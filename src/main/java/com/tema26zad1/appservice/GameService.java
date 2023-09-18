@@ -1,7 +1,9 @@
 package com.tema26zad1.appservice;
 
+import com.tema26zad1.bet.TemporaryBet;
 import com.tema26zad1.betgame.BetGame;
 import com.tema26zad1.betgame.BetGameRepository;
+import com.tema26zad1.betgame.TempBetGame;
 import com.tema26zad1.game.Game;
 import com.tema26zad1.game.GameRepository;
 import com.tema26zad1.game.GameResult;
@@ -40,7 +42,7 @@ public class GameService {
     }
 
     public List<Game> onlyUnselectedGames(List<Long> gameIdList) {
-        List<Game> gamesLeft = gameRepository.findAll();
+        List<Game> gamesLeft = gameRepository.findAllGamesThatAreNotEnded();
         List<Game> gamesAddedToBetCoupon = new ArrayList<>();
         if (!gameIdList.isEmpty()) {
             for (Long id : gameIdList) {
@@ -67,5 +69,10 @@ public class GameService {
 
     public void deleteGameById(Long gameId) {
         gameRepository.deleteById(gameId);
+    }
+
+    public List<Game> listOfGamesThatAreEnded(TemporaryBet temporaryBet) {
+        List<Game> allGamesById = gameRepository.findAllById(temporaryBet.getTempBetGames().stream().map(TempBetGame::getGameId).toList());
+        return allGamesById.stream().filter(game -> !game.getGameResult().equals(GameResult.WAITING)).toList();
     }
 }

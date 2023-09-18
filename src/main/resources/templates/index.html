@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="content col m-2">
-                <p class="text-center"><b>Lista meczów</b></p>
+            <p class="text-center"><b>Lista meczów</b></p>
             <div th:each="game : ${listOfAvailableGames}">
                 <form class="row" name="bet-form" th:object="${betGame}" action="/addBetGame" method="post">
                     <div>
@@ -73,6 +73,7 @@
         <div class="content col m-2">
             <p class="text-center"><b>Zakład</b></p>
             <p class="text-center" th:if="${bet.tempBetGames.size() < 1}">Kliknij kurs meczu, aby dodać pozycję.</p>
+            <p class="text-center" style="color: red"  th:text="${thereAreEndedGames}"></p>
             <div th:if="${betCouponGamesList}">
                 <div th:if="${betCouponGamesList}" th:each="betGame : ${betCouponGamesList}" th:object="${betGame}">
                     <table class="table table-striped">
@@ -88,7 +89,8 @@
                     </table>
                 </div>
                 <p class="text-end" th:if="${bet.getRate() != null}" th:text="|Łączny kurs: ${bet.getRate()}|"></p>
-                <p class="text-end" th:if="${bet.betMoney != null}" th:text="|Do wygrania: ${bet.getMoneyToWin()}zł|"></p>
+                <p class="text-end" th:if="${bet.betMoney != null}"
+                   th:text="|Do wygrania: ${bet.getMoneyToWin()}zł|"></p>
                 <form th:if="${bet.getRate() != null}" method="post" action="/addBetGame" th:object="${bet}">
                     <input hidden="hidden" th:value="*{betId}" th:name="betId">
                     <div class="input-group ">

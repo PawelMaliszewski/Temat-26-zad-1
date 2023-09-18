@@ -11,4 +11,5 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
     @Query(value = "SELECT g FROM Game g WHERE g.gameResult = 'WAITING'")
     List<Game> findAllGamesThatAreNotEnded();
+
 }
