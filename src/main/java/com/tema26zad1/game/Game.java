@@ -74,4 +74,38 @@ public class Game {
     public void setGameResult(GameResult gameResult) {
         this.gameResult = gameResult;
     }
+
+    public String gameTitle() {
+        return nameOfTeamA + " VS " + nameOfTeamB;
+    }
+
+    public String groupName() {
+        return "group" + gameId;
+    }
+
+
+    public String idForElementA() {
+        return "ag" + gameId;
+    }
+
+    public String idForElementB() {
+        return "bg" + gameId;
+    }
+
+    public String idForElementC() {
+        return "cg" + gameId;
+    }
+
+    public String jsDataA() {
+        return gameId + ";" + nameOfTeamA + " vs " + nameOfTeamB + ";" + nameOfTeamA + ";" + teamAWinRate + ";";
+    }
+
+    public String jsDataB() {
+        return gameId + ";" + nameOfTeamA + " vs " + nameOfTeamB + ";" + "Remis" + ";" + drawRate + ";";
+    }
+
+    public String jsDataC() {
+        return gameId + ";" + nameOfTeamA + " vs " + nameOfTeamB + ";" + nameOfTeamB + ";" + teamBWinRate;
+    }
 }
+

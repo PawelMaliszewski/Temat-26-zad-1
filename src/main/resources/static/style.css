@@ -38,6 +38,10 @@ th, td {
    align-content: center;
     justify-content: space-evenly;
 }
+#list-group-item{
+    padding-left: 100px;
+}
+
 
 
 

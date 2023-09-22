@@ -43,6 +43,7 @@ public class BetController {
         } else {
             model.addAttribute("listOfAvailableGames", gameService.gamesForBet());
         }
+        model.addAttribute("betGames", new ArrayList<String>());
         model.addAttribute("thereAreEndedGames", thereAreEndedGames);
         model.addAttribute("bet", temporaryBet);
         model.addAttribute("top4GamesList", gameService.fourMostFrequentBetGames());
@@ -105,4 +106,11 @@ public class BetController {
         model.addAttribute("betList", betService.findAllBets());
         return "bet_list";
     }
+
+    @PostMapping("/test")
+    public String addBetGameList(@RequestParam String data) {
+        System.out.println(data);
+        return "redirect:/";
+    }
+
 }
