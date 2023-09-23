@@ -5,7 +5,7 @@
       layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
-    <title  th:text="(${bet})? 'Dodano zakład' : 'Wyszukaj zaklad'"></title>
+    <title></title>
 </head>
 <body>
 <main layout:fragment="content">
@@ -23,7 +23,7 @@
         <th:block th:if="${bet != null}" th:object="${bet}">
             <div class="d-flex justify-content-center col-xs-12 text-center">
                 <div>
-                    <h2 class="text-center" style="color: green"> Zakład dodany prawidłowo</h2>
+                    <h2 class="text-center" style="color: green"> Twój zakład</h2>
                     <br>
                     <div>
                         <TABLE class="table table-secondary">

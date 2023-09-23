@@ -12,6 +12,7 @@ public class BetGame {
     private Long id;
     private Long gameId;
     private String gameTitle;
+    private String betFor;
     @Enumerated(EnumType.STRING)
     private GameResult gameResult;
     private double winRate;
@@ -68,5 +69,25 @@ public class BetGame {
 
     public void setBet(Bet bet) {
         this.bet = bet;
+    }
+
+    public String getBetFor() {
+        return betFor;
+    }
+
+    public void setBetFor(String betFor) {
+        this.betFor = betFor;
+    }
+
+    @Override
+    public String toString() {
+        return "BetGame{" +
+               "gameId=" + gameId +
+               ", gameTitle='" + gameTitle + '\'' +
+               ", betFor='" + betFor + '\'' +
+               ", gameResult=" + gameResult +
+               ", winRate=" + winRate +
+               ", bet=" + bet +
+               '}';
     }
 }

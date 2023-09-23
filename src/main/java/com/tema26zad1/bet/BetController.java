@@ -2,18 +2,12 @@ package com.tema26zad1.bet;
 
 import com.tema26zad1.appservice.BetService;
 import com.tema26zad1.appservice.GameService;
-
-import com.tema26zad1.betgame.TempBetGame;
-import com.tema26zad1.game.Game;
+import com.tema26zad1.betgame.BetGame;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,50 +17,17 @@ public class BetController {
 
     private final BetService betService;
     private final GameService gameService;
-    private TemporaryBet temporaryBet;
 
-    public BetController(BetService betService, GameService gameService, TemporaryBet temporaryBet) {
+    public BetController(BetService betService, GameService gameService) {
         this.betService = betService;
         this.gameService = gameService;
-        this.temporaryBet = temporaryBet;
     }
 
     @GetMapping("/")
-    public String home(@RequestParam(name = "thereAreEndedGames", required = false) String thereAreEndedGames, Model model) {
-        if (!temporaryBet.getTempBetGames().isEmpty()) {
-            model.addAttribute("betCouponGamesList", temporaryBet.getTempBetGames());
-            List<Long> gameIdList = new ArrayList<>();
-            for (TempBetGame tempBetGame1 : temporaryBet.getTempBetGames()) {
-                gameIdList.add(tempBetGame1.getGameId());
-            }
-            model.addAttribute("listOfAvailableGames", gameService.onlyUnselectedGames(gameIdList));
-        } else {
-            model.addAttribute("listOfAvailableGames", gameService.gamesForBet());
-        }
-        model.addAttribute("betGames", new ArrayList<String>());
-        model.addAttribute("thereAreEndedGames", thereAreEndedGames);
-        model.addAttribute("bet", temporaryBet);
+    public String home(Model model) {
+        model.addAttribute("listOfAvailableGames", gameService.gamesForBet());
         model.addAttribute("top4GamesList", gameService.fourMostFrequentBetGames());
-        model.addAttribute("betGame", new TempBetGame());
         return "index";
-    }
-
-    @GetMapping("/save_coupon")
-    public String saveCoupon(RedirectAttributes ra, Model model) {
-        List<Game> listOfEndedGames = gameService.listOfGamesThatAreEnded(temporaryBet);
-        if (listOfEndedGames.isEmpty()) {
-            Bet bet = betService.convertToBetGame(temporaryBet);
-            betService.saveBet(bet);
-            temporaryBet.clear();
-            return "redirect:bet" + "?betId=" + bet.getBetId();
-        } else {
-            for (Game game : listOfEndedGames) {
-                temporaryBet.getTempBetGames().removeIf(tempBetGame -> tempBetGame.getGameId().equals(game.getGameId()));
-            }
-            String thereAreEndedGames = "Nie udało się dodać zakładu niektóre gry się skończyły.";
-            ra.addAttribute("thereAreEndedGames", thereAreEndedGames);
-        }
-        return "redirect:/";
     }
 
     @GetMapping({"/bet", "/find_bet"})
@@ -79,38 +40,21 @@ public class BetController {
         return "bet";
     }
 
-    @PostMapping("/addBetGame")
-    public String addBet(@ModelAttribute TempBetGame tempBetGame, @ModelAttribute TemporaryBet bet) {
-        if (bet.getBetMoney() != null) {
-            temporaryBet.setBetMoney(bet.getBetMoney());
-        }
-        if (tempBetGame.getGameResult() != null) {
-            tempBetGame.setWinRate(betService.findWinRate(tempBetGame, null, gameService.findGameById(tempBetGame.getGameId())));
-            temporaryBet.getTempBetGames().add(tempBetGame);
-        }
-        temporaryBet = betService.toWinTempBet(temporaryBet);
-        return "redirect:/";
-    }
-
-    @GetMapping("/remove")
-    public String remove(@ModelAttribute TempBetGame bet, @RequestParam(required = false) Long betByGameId) {
-        temporaryBet.getTempBetGames().removeIf(betGame -> betGame.getGameId().equals(betByGameId));
-        if (!betService.findAllBetGames().isEmpty()) {
-            temporaryBet = betService.toWinTempBet(temporaryBet);
-        }
-        return "redirect:/";
-    }
-
     @GetMapping("bet_list")
     public String betList(@NotNull Model model) {
         model.addAttribute("betList", betService.findAllBets());
         return "bet_list";
     }
 
-    @PostMapping("/test")
-    public String addBetGameList(@RequestParam String data) {
-        System.out.println(data);
-        return "redirect:/";
+    @PostMapping(value = "/bet")
+    public ResponseEntity<Bet> update(@RequestBody Bet bet) {
+        System.out.println(bet.toString());
+        List<BetGame> tempBetGames = new ArrayList<>(bet.getBetGames());
+        bet.getBetGames().clear();
+        betService.saveBet(bet);
+        tempBetGames.forEach(betGame -> betGame.setBet(bet));
+        betService.getBetGameRepository().saveAll(tempBetGames);
+        return ResponseEntity.ok(bet);
     }
 
 }

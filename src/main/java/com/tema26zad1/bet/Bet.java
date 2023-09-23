@@ -80,5 +80,18 @@ public class Bet {
     public void setEarned(BigDecimal earned) {
         this.earned = earned;
     }
+
+    @Override
+    public String toString() {
+        return "Bet{" +
+               "betId=" + betId +
+               ", betMoney=" + betMoney +
+               ", earned=" + earned +
+               ", rate=" + rate +
+               ", moneyToWin=" + moneyToWin +
+               ", notActive=" + notActive +
+               ", betGames=" + betGames +
+               '}';
+    }
 }
 

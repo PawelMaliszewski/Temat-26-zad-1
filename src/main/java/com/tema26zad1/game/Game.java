@@ -97,15 +97,15 @@ public class Game {
     }
 
     public String jsDataA() {
-        return gameId + ";" + nameOfTeamA + " vs " + nameOfTeamB + ";" + nameOfTeamA + ";" + teamAWinRate + ";";
+        return gameId + ";" + (nameOfTeamA + " vs " + nameOfTeamB) + ";" + nameOfTeamA + ";" + GameResult.TEAM_A_WON.name() + ";" + teamAWinRate + ";";
     }
 
     public String jsDataB() {
-        return gameId + ";" + nameOfTeamA + " vs " + nameOfTeamB + ";" + "Remis" + ";" + drawRate + ";";
+        return gameId + ";" + (nameOfTeamA + " vs " + nameOfTeamB) + ";" + "Remis" + ";" + GameResult.DRAW.name() + ";" + drawRate + ";";
     }
 
     public String jsDataC() {
-        return gameId + ";" + nameOfTeamA + " vs " + nameOfTeamB + ";" + nameOfTeamB + ";" + teamBWinRate;
+        return gameId + ";" + (nameOfTeamA + " vs " + nameOfTeamB) + ";" + nameOfTeamB + ";" + GameResult.TEAM_B_WON.name() + ";" + teamBWinRate;
     }
 }
 

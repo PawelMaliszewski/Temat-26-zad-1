@@ -1,9 +1,7 @@
 package com.tema26zad1.appservice;
 
-import com.tema26zad1.bet.TemporaryBet;
 import com.tema26zad1.betgame.BetGame;
 import com.tema26zad1.betgame.BetGameRepository;
-import com.tema26zad1.betgame.TempBetGame;
 import com.tema26zad1.game.Game;
 import com.tema26zad1.game.GameRepository;
 import com.tema26zad1.game.GameResult;
@@ -75,8 +73,8 @@ public class GameService {
         gameRepository.deleteById(gameId);
     }
 
-    public List<Game> listOfGamesThatAreEnded(@NotNull TemporaryBet temporaryBet) {
-        List<Game> allGamesById = gameRepository.findAllById(temporaryBet.getTempBetGames().stream().map(TempBetGame::getGameId).toList());
+    public List<Game> listOfGamesThatAreEnded() {
+        List<Game> allGamesById = gameRepository.findAll();
         return allGamesById.stream().filter(game -> !game.getGameResult().equals(GameResult.WAITING)).toList();
     }
 }

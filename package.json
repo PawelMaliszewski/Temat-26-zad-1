@@ -1,0 +1,9 @@
+{
+  "name": "Tema26cwicz1",
+  "version": "1.0.0",
+  "dependencies": {
+    "@inrupt/solid-client-authn-browser": "^1.17.2",
+    "next": "^13.5.2",
+    "react": "^18.2.0"
+  }
+}

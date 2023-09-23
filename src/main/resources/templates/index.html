@@ -11,7 +11,7 @@
 <body>
 
 <main layout:fragment="content">
-<div class="container d-flex justify-content-evenly">
+<div class="container d-flex justify-content-evenly" id="page-content">
     <div class="content col m-2">
         <p class="text-center"><b>Popularne Zakłady</b></p>
         <div th:each="game: ${top4GamesList}" th:object="${game}">
