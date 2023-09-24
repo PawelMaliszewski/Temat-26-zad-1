@@ -151,6 +151,9 @@ function addBetGameToList(jsData) {
 
 function removeGame(gameId) {
     betGamesMapList.delete(gameId);
+    if (betGamesMapList.size === 0) {
+        tempBetMoney = 0.0;
+    }
     betGamesList()
 }
 
