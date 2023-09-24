@@ -21,7 +21,7 @@ public class AppService {
         this.betService = betService;
     }
 
-    public void deleteGameAndBetAndBetGamesRelatedToGameId(Long gameId, @NotNull List<BetGame> betGamesByGameId) {
+    public void deleteGameAndBetAndBetGamesRelatedToGameId(@NotNull Long gameId, @NotNull List<BetGame> betGamesByGameId) {
         List<BetGame> oneBetGameOnBetList = betGamesByGameId.stream()
                 .filter(betGame -> betRepository.findById(betGame.getBet().getBetId()).get().getBetGames().size() == 1).toList();
         if (!oneBetGameOnBetList.isEmpty()) {

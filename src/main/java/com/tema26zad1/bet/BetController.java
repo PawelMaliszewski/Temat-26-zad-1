@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class BetController {
         if (betId != null) {
             Optional<Bet> betById = betService.getBetRepository().findById(betId);
             betById.ifPresentOrElse(bet -> model.addAttribute("bet", bet),
-                    () -> model.addAttribute("notFound", "Nie znaleziono zakładu o Id:" + ((betId != null) ? betId : "")));
+                    () -> model.addAttribute("notFound", "Nie znaleziono zakładu o Id: " + betId));
         }
         return "bet";
     }
@@ -48,13 +49,16 @@ public class BetController {
 
     @PostMapping(value = "/bet")
     public ResponseEntity<Bet> update(@RequestBody Bet bet) {
-        System.out.println(bet.toString());
-        List<BetGame> tempBetGames = new ArrayList<>(bet.getBetGames());
-        bet.getBetGames().clear();
-        betService.saveBet(bet);
-        tempBetGames.forEach(betGame -> betGame.setBet(bet));
-        betService.getBetGameRepository().saveAll(tempBetGames);
-        return ResponseEntity.ok(bet);
+        if (gameService.checkIfAnyGameEnded(bet)) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            System.out.println(bet.toString());
+            List<BetGame> tempBetGames = new ArrayList<>(bet.getBetGames());
+            bet.getBetGames().clear();
+            betService.saveBet(bet);
+            tempBetGames.forEach(betGame -> betGame.setBet(bet));
+            betService.getBetGameRepository().saveAll(tempBetGames);
+            return ResponseEntity.ok(bet);
+        }
     }
-
 }

@@ -78,16 +78,4 @@ public class BetGame {
     public void setBetFor(String betFor) {
         this.betFor = betFor;
     }
-
-    @Override
-    public String toString() {
-        return "BetGame{" +
-               "gameId=" + gameId +
-               ", gameTitle='" + gameTitle + '\'' +
-               ", betFor='" + betFor + '\'' +
-               ", gameResult=" + gameResult +
-               ", winRate=" + winRate +
-               ", bet=" + bet +
-               '}';
-    }
 }

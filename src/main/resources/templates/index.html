@@ -22,7 +22,7 @@
     <div class="content col m-2">
         <p class="text-center"><b>Lista meczów</b></p>
         <p class="text-center"><b>Aby dodać mecz do kuponu, kliknij na kurs</b></p>
-        <div th:each="game : ${listOfAvailableGames}">
+        <div th:each="game : ${listOfAvailableGames}" id="list-of-games">
             <div th:id="${game.groupName()}">
                 <table class="table table-primary">
                     <tr>
@@ -56,7 +56,7 @@
                         <th>
                             <input type="radio" class="btn-check" autocomplete="off"
                                    th:id="${game.idForElementC()}" th:name="${game.groupName()}"
-                                   th:data-jsData="${game.jsDataC()}"
+                                   th:data-jsData="${game.jsDataC()}" checked=""
                                    onclick="addBetGameToList(this.getAttribute('data-jsData'))">
                             <label class="btn btn-outline-success" th:text="${game.teamBWinRate}"
                                    th:for="${game.idForElementC()}"></label>
@@ -81,7 +81,7 @@
         </div>
         <div id="bet-money-div">
             <label for="betMoney" class="form-label" ><b>Wpisz Kwotę: </b></label>
-            <input id="betMoney" type="number" class="form-control" autocomplete="off" min="1" step=".01"
+            <input id="betMoney"  type="number" class="form-control" autocomplete="off" min="1" step=".01"
             placeholder="Kwota minimalna 1zł">
             <button id="coupon-button" class="btn btn-outline-success mt-2" type="button" onclick="sendList()">Dodaj kupon</button>
         </div>

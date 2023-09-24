@@ -1,5 +1,6 @@
 package com.tema26zad1.appservice;
 
+import com.tema26zad1.bet.Bet;
 import com.tema26zad1.betgame.BetGame;
 import com.tema26zad1.betgame.BetGameRepository;
 import com.tema26zad1.game.Game;
@@ -7,7 +8,6 @@ import com.tema26zad1.game.GameRepository;
 import com.tema26zad1.game.GameResult;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,21 +40,6 @@ public class GameService {
         return gameRepository.findAll();
     }
 
-    public List<Game> onlyUnselectedGames(@NotNull List<Long> gameIdList) {
-        List<Game> gamesLeft = gameRepository.findAllGamesThatAreNotEnded();
-        List<Game> gamesAddedToBetCoupon = new ArrayList<>();
-        if (!gameIdList.isEmpty()) {
-            for (Long id : gameIdList) {
-                if (gameRepository.findById(id).isPresent()) {
-                    gamesAddedToBetCoupon.add(gameRepository.findById(id).get());
-                }
-            }
-        }
-        gamesLeft.removeAll(gamesAddedToBetCoupon);
-        System.out.println();
-        return gamesLeft;
-    }
-
     public List<Game> fourMostFrequentBetGames() {
         List<Long> collectList = betGameRepository.findAll()
                 .stream()
@@ -76,5 +61,10 @@ public class GameService {
     public List<Game> listOfGamesThatAreEnded() {
         List<Game> allGamesById = gameRepository.findAll();
         return allGamesById.stream().filter(game -> !game.getGameResult().equals(GameResult.WAITING)).toList();
+    }
+
+    public Boolean checkIfAnyGameEnded(@NotNull Bet bet) {
+        return bet.getBetGames().stream().noneMatch(betGame ->
+                gameRepository.findById(betGame.getGameId()).get().getGameResult().equals(GameResult.WAITING));
     }
 }

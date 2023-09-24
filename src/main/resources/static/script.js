@@ -1,3 +1,18 @@
+
+let gameList = document.querySelector('#page-content');
+const savedGameList = localStorage.getItem('gameList');
+
+console.log(savedGameList)
+
+if (savedGameList) {
+    console.log('in save')
+    gameList.innerHTML = savedGameList;
+    betGamesMapList = new Map(Object.entries(JSON.parse(localStorage.getItem('betGames'))))
+    bet = new Bet(Object.entries(JSON.parse(localStorage.getItem('bet'))));
+    betGamesList();
+    console.log(betGamesMapList);
+}
+
 class Bet {
 
     constructor(betId, betMoney, rate, moneyToWin, notActive, betGames) {
@@ -100,13 +115,10 @@ function betGamesList() {
     if (divInsideBetGameChild != null) {
         divInsideBetGameChild.remove();
     }
-
     let betGamesTemp = createTempBetGamesDiv();
-
     let ulList = document.createElement('ul');
     ulList.setAttribute('class', 'list-group-item');
     betGamesTemp.appendChild(ulList)
-
     for (let [k, v] of betGamesMapList) {
         rateSum += (parseFloat(v.winRate));
         const gameTitle = document.createElement("l1");
@@ -132,8 +144,9 @@ function betGamesList() {
     }
     bet.rate = rateSum;
     bet.moneyToWin = finalSum.valueOf();
-
+    bet.betMoney = tempBetMoney;
     showInputAndButton();
+    appendOnChange();
 }
 
 function showInputAndButton() {
@@ -150,7 +163,6 @@ function showInputAndButton() {
 
 function sendList() {
     bet.betGames = Array.from(betGamesMapList.values());
-    bet.betMoney = tempBetMoney;
     const data = JSON.stringify(bet);
     $.ajax({
         contentType: 'application/json; charset=utf-8',
@@ -160,6 +172,10 @@ function sendList() {
         data: data,
         success: function (data) {
             location.replace('/bet?betId='+ data.betId)
+        },
+        error: function (data) {
+            alert("Niektóre mecze się zakończyły, zacznij on nowa.")
+            location.reload();
         }
     })
     betGamesMapList = new Map()
@@ -172,10 +188,23 @@ function addBetGameToList(jsData) {
     betGamesMapList.set(jsDataArray[0], new BetGame(jsDataArray[0], jsDataArray[1], jsDataArray[2],
         jsDataArray[3], jsDataArray[4]));
     betGamesList()
+    ;
 }
 
 function removeGame(gameId) {
     betGamesMapList.delete(gameId);
     betGamesList()
 }
+
+function appendOnChange() {
+    localStorage.setItem('gameList', gameList.innerHTML)
+    localStorage.betGames = JSON.stringify(Object.fromEntries(betGamesMapList));
+    localStorage.bet = JSON.stringify(bet);
+}
+
+
+
+
+
+
 

@@ -10,7 +10,9 @@ public class Game {
     private Long gameId;
     private String nameOfTeamA;
     private String nameOfTeamB;
+    @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
     private double teamAWinRate;
+    @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
     private double teamBWinRate;
     private double drawRate;
     @Enumerated(EnumType.STRING)
@@ -82,7 +84,6 @@ public class Game {
     public String groupName() {
         return "group" + gameId;
     }
-
 
     public String idForElementA() {
         return "ag" + gameId;
