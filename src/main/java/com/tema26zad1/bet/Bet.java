@@ -2,7 +2,6 @@ package com.tema26zad1.bet;
 
 import com.tema26zad1.betgame.BetGame;
 import jakarta.persistence.*;
-import org.hibernate.type.NumericBooleanConverter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +13,8 @@ public class Bet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long betId;
     private BigDecimal betMoney;
-    private BigDecimal earned;
     private Double rate;
     private BigDecimal moneyToWin;
-    @Convert(converter = NumericBooleanConverter.class)
     private boolean notActive;
     @OneToMany(mappedBy = "bet", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<BetGame> betGames = new ArrayList<>();
@@ -71,14 +68,6 @@ public class Bet {
 
     public void setBetGames(List<BetGame> betGames) {
         this.betGames = betGames;
-    }
-
-    public BigDecimal getEarned() {
-        return earned;
-    }
-
-    public void setEarned(BigDecimal earned) {
-        this.earned = earned;
     }
 }
 

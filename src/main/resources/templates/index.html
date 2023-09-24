@@ -36,16 +36,16 @@
                     </tr>
                     <tr>
                         <th>
-                            <input type="radio" class="btn-check" autocomplete="off"
+                            <input type="radio" class="" autocomplete="off"
                                    th:id="${game.idForElementA()}" th:name="${game.groupName()}"
                                    th:data-jsData="${game.jsDataA()}"
                                    onclick="addBetGameToList(this.getAttribute('data-jsData'))">
                             <label class="btn btn-outline-success" th:text="${game.teamAWinRate}"
-                                   th:for="|${game.idForElementA()}|"></label>
+                                   th:for="|${game.idForElementA()}|" th:id="|${game.idForElementA()}L|"></label>
                         </th>
                         <th>
                             <div>
-                                <input type="radio" class="btn-check" autocomplete="off"
+                                <input type="radio" class="" autocomplete="off"
                                        th:id="${game.idForElementB()}" th:name="${game.groupName()}"
                                        th:data-jsData="${game.jsDataB()}"
                                        onclick="addBetGameToList(this.getAttribute('data-jsData'))">
@@ -54,7 +54,7 @@
                             </div>
                         </th>
                         <th>
-                            <input type="radio" class="btn-check" autocomplete="off"
+                            <input type="radio" class="" autocomplete="off"
                                    th:id="${game.idForElementC()}" th:name="${game.groupName()}"
                                    th:data-jsData="${game.jsDataC()}"
                                    onclick="addBetGameToList(this.getAttribute('data-jsData'))">
@@ -62,12 +62,12 @@
                                    th:for="${game.idForElementC()}"></label>
                         </th>
                         <th>
-                            <input type="radio" class="btn-check" autocomplete="off"
+                            <input type="radio" class="" autocomplete="off"
                                    th:id="|delete${game.gameId}|" th:name="${game.groupName()}"
                                    th:data-gameId="${game.gameId}" checked
                                    onclick="removeGame(this.getAttribute('data-gameId'))">
                             <label class="btn btn-light"
-                                   th:for="|delete${game.gameId}|">Usuń</label>
+                                   th:for="|delete${game.gameId}|" th:id="|delete${game.gameId}l|">Usuń</label>
                         </th>
                     </tr>
                 </table>

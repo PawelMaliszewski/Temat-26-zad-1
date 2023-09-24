@@ -1,7 +1,4 @@
 
-let gameList = document.querySelector('#currentGamesList');
-const savedGameList = localStorage.getItem('gameList');
-
 class Bet {
 
     constructor(betId, betMoney, rate, moneyToWin, notActive, betGames) {
@@ -19,7 +16,7 @@ class BetGame {
         this.gameId = gameId;
         this.gameTitle = gameTitle;
         this.betFor = betFor;
-        this.gameResult=gameResult;
+        this.gameResult = gameResult;
         this.winRate = winRate;
     }
 }
@@ -34,13 +31,29 @@ document.getElementById('betMoney').addEventListener('input', () => {
 })
 showInputAndButton();
 
+function setRadioButtons() {
+    for (let [k, v] of betGamesMapList) {
+        if (v.gameResult === 'TEAM_A_WON') {
+            console.log("A")
+            document.getElementById('ag' + k).setAttribute('checked', '')
+        }
+        if (v.gameResult === 'DRAW') {
+            console.log("D")
+            document.getElementById('bg' + k).setAttribute('checked', '')
+        }
+        if (v.gameResult === 'TEAM_B_WON') {
+            console.log("B")
+            document.getElementById('cg' + k).setAttribute('checked', '')
+        }
+    }
+}
+
 if ((localStorage.getItem('fromLocalStorageBetGamesList'))) {
-    gameList.innerHTML = savedGameList;
     betGamesMapList = new Map(Object.entries(JSON.parse(localStorage.getItem('fromLocalStorageBetGamesList'))))
-    console.log('in storage')
     tempBetMoney = localStorage.getItem('tempBetMoney')
-    console.log("BetMoney from storage:" + tempBetMoney)
+    // setRadioButtons();
     betGamesList()
+    setRadioButtons()
 }
 
 function createTempBetGamesDiv() {
@@ -49,7 +62,6 @@ function createTempBetGamesDiv() {
     divBetList.appendChild(betGamesTemp);
     return betGamesTemp;
 }
-
 
 function betGamesList() {
     let rateSum = 0.00;
@@ -68,7 +80,7 @@ function betGamesList() {
         ulList.appendChild(gameTitle).innerHTML = "<b>Drużyny:</b> " + v.gameTitle;
         const winningConditionAndRate = document.createElement("li");
         winningConditionAndRate.setAttribute('class', 'list-group-item list-group-item-secondary')
-        ulList.appendChild(winningConditionAndRate).innerHTML = "<b>Zakład na:</b> " + v.betFor  + "<br><b>Kurs:</b> " + v.winRate;
+        ulList.appendChild(winningConditionAndRate).innerHTML = "<b>Zakład na:</b> " + v.betFor + "<br><b>Kurs:</b> " + v.winRate;
     }
     let finalSum = (betGamesMapList.size === 1) ? rateSum : rateSum * .84;
     rateSum = rateSum.toFixed(2)
@@ -78,17 +90,15 @@ function betGamesList() {
     const moneyToWin = document.createElement("li");
     moneyToWin.setAttribute('class', 'list-group-item list-group-item-warning')
     moneyToWin.setAttribute('id', 'moneyToWin')
-    if (betGamesMapList.size.valueOf() > 1){
+    if (betGamesMapList.size.valueOf() > 1) {
         ulList.appendChild(moneyToWin).innerHTML = "<b>Kurs całkowity:</b> " + rateSum + "<br>"
             + ((tempBetMoney > 0) ? "<b>Do wygrania:</b> " + finalSum + "zł" : "");
-    } else if (tempBetMoney > 0){
+    } else if (tempBetMoney > 0) {
         ulList.appendChild(moneyToWin).innerHTML = "<b>Do wygrania:</b> " + finalSum + "zł";
     }
 
-    bet = new Bet(null, tempBetMoney, rateSum, finalSum , 0, null);
-    console.log("new Bet from betlist() : " + bet.betMoney)
+    bet = new Bet(null, tempBetMoney, rateSum, finalSum, 0, null);
     showInputAndButton();
-    setRadioButtons();
     appendOnChange();
 }
 
@@ -100,34 +110,11 @@ function showInputAndButton() {
         button.style.display = 'none';
     } else {
         betDiv.style.display = "block";
-        document.getElementById('betMoney').setAttribute('value',  tempBetMoney)
-        console.log("else block :" + tempBetMoney)
-
-
+        document.getElementById('betMoney').setAttribute('value', tempBetMoney)
     }
-    if (tempBetMoney > 0) {button.style.display = 'block'}
-}
-
-function setRadioButtons() {
-    for (let [k, v] of betGamesMapList) {
-        switch(v.gameResult) {
-            case 'TEAM_A_WON':
-                console.log("Klucz ID dla radia: " + 'ag' + k)
-                console.log(document.getElementById('ag'+k))
-                document.getElementById('ag'+k).setAttribute('checked', '')
-                break;
-            case 'DRAW':
-                document.getElementById('bg'+k).setAttribute('checked', '')
-                console.log("Klucz ID dla radia: " + 'bg' + k)
-                break;
-            case 'TEAM_B_WON':
-                document.getElementById('cg'+ k).setAttribute('checked', '')
-                console.log("Klucz ID dla radia: " + 'bg' + k)
-                break;
-            default:
-                alert("Nie udało sie odnaleźć ID dla radia !!!")
-        }
-}
+    if (tempBetMoney > 0) {
+        button.style.display = 'block'
+    }
 }
 
 function sendList() {
@@ -140,7 +127,7 @@ function sendList() {
         url: '/bet',
         data: data,
         success: function (data) {
-            location.replace('/bet?betId='+ data.betId)
+            location.replace('/bet?betId=' + data.betId)
             localStorage.clear()
         },
         error: function (data) {
@@ -167,7 +154,6 @@ function removeGame(gameId) {
 }
 
 function appendOnChange() {
-    localStorage.setItem('gameList', gameList.innerHTML)
     localStorage.fromLocalStorageBetGamesList = JSON.stringify(Object.fromEntries(betGamesMapList));
     localStorage.setItem('tempBetMoney', tempBetMoney)
 }
