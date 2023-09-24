@@ -12,39 +12,6 @@ class Bet {
         this.notActive = notActive;
         this.betGames = betGames;
     }
-
-    get bet_Money() {
-        return this.betMoney;
-    }
-
-    set bet_Money(value) {
-        this.betMoney = value;
-    }
-
-    get _rate() {
-        return this.rate;
-    }
-
-    set _rate(value) {
-        this.rate = value;
-    }
-
-    get money_To_Win() {
-        return this.moneyToWin;
-    }
-
-    set money_To_Win(value) {
-        this.moneyToWin = value;
-    }
-
-    get bet_Games() {
-        return this.betGames;
-    }
-
-    set bet_Games(value) {
-        this.betGames = value;
-    }
-
 }
 
 class BetGame {
@@ -55,33 +22,9 @@ class BetGame {
         this.gameResult=gameResult;
         this.winRate = winRate;
     }
-
-    get game_Title() {
-        return this.gameTitle;
-    }
-
-    set game_Title(value) {
-        this.gameTitle = value;
-    }
-
-    get bet_For() {
-        return this.betFor;
-    }
-
-    set bet_For(value) {
-        this.betFor = value;
-    }
-
-    get win_Rate() {
-        return this.winRate;
-    }
-
-    set win_Rate(value) {
-        this.winRate = value;
-    }
 }
 
-let tempBetMoney;
+let tempBetMoney = 0.0;
 let bet;
 let betGamesMapList = new Map();
 let divBetList = document.getElementById("bet-game-list");
@@ -95,11 +38,9 @@ if ((localStorage.getItem('fromLocalStorageBetGamesList'))) {
     gameList.innerHTML = savedGameList;
     betGamesMapList = new Map(Object.entries(JSON.parse(localStorage.getItem('fromLocalStorageBetGamesList'))))
     console.log('in storage')
-    let betJsonObj = localStorage.getItem('fromLocalStorageBet');
-    console.log("betJsonObj: " + betJsonObj)
-    const betFromJson =  new Bet(JSON.parse(betJsonObj));
-    console.log("betFromJson: " + betFromJson.money_To_Win)
-    betGamesList();
+    tempBetMoney = localStorage.getItem('tempBetMoney')
+    console.log("BetMoney from storage:" + tempBetMoney)
+    betGamesList()
 }
 
 function createTempBetGamesDiv() {
@@ -108,6 +49,7 @@ function createTempBetGamesDiv() {
     divBetList.appendChild(betGamesTemp);
     return betGamesTemp;
 }
+
 
 function betGamesList() {
     let rateSum = 0.00;
@@ -142,9 +84,11 @@ function betGamesList() {
     } else if (tempBetMoney > 0){
         ulList.appendChild(moneyToWin).innerHTML = "<b>Do wygrania:</b> " + finalSum + "zł";
     }
-    bet = new Bet(null, tempBetMoney, rateSum, finalSum , 0, null);
 
+    bet = new Bet(null, tempBetMoney, rateSum, finalSum , 0, null);
+    console.log("new Bet from betlist() : " + bet.betMoney)
     showInputAndButton();
+    setRadioButtons();
     appendOnChange();
 }
 
@@ -156,11 +100,34 @@ function showInputAndButton() {
         button.style.display = 'none';
     } else {
         betDiv.style.display = "block";
-        console.log("else block" + bet.betMoney)
+        document.getElementById('betMoney').setAttribute('value',  tempBetMoney)
+        console.log("else block :" + tempBetMoney)
 
 
     }
     if (tempBetMoney > 0) {button.style.display = 'block'}
+}
+
+function setRadioButtons() {
+    for (let [k, v] of betGamesMapList) {
+        switch(v.gameResult) {
+            case 'TEAM_A_WON':
+                console.log("Klucz ID dla radia: " + 'ag' + k)
+                console.log(document.getElementById('ag'+k))
+                document.getElementById('ag'+k).setAttribute('checked', '')
+                break;
+            case 'DRAW':
+                document.getElementById('bg'+k).setAttribute('checked', '')
+                console.log("Klucz ID dla radia: " + 'bg' + k)
+                break;
+            case 'TEAM_B_WON':
+                document.getElementById('cg'+ k).setAttribute('checked', '')
+                console.log("Klucz ID dla radia: " + 'bg' + k)
+                break;
+            default:
+                alert("Nie udało sie odnaleźć ID dla radia !!!")
+        }
+}
 }
 
 function sendList() {
@@ -174,6 +141,7 @@ function sendList() {
         data: data,
         success: function (data) {
             location.replace('/bet?betId='+ data.betId)
+            localStorage.clear()
         },
         error: function (data) {
             alert("Niektóre mecze się zakończyły, zacznij on nowa.")
@@ -201,7 +169,7 @@ function removeGame(gameId) {
 function appendOnChange() {
     localStorage.setItem('gameList', gameList.innerHTML)
     localStorage.fromLocalStorageBetGamesList = JSON.stringify(Object.fromEntries(betGamesMapList));
-    localStorage.fromLocalStorageBet = JSON.stringify(bet, null);
+    localStorage.setItem('tempBetMoney', tempBetMoney)
 }
 
 

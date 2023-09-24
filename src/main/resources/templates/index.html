@@ -56,7 +56,7 @@
                         <th>
                             <input type="radio" class="btn-check" autocomplete="off"
                                    th:id="${game.idForElementC()}" th:name="${game.groupName()}"
-                                   th:data-jsData="${game.jsDataC()}" checked=""
+                                   th:data-jsData="${game.jsDataC()}"
                                    onclick="addBetGameToList(this.getAttribute('data-jsData'))">
                             <label class="btn btn-outline-success" th:text="${game.teamBWinRate}"
                                    th:for="${game.idForElementC()}"></label>
