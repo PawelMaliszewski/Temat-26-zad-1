@@ -1,17 +1,6 @@
 
-let gameList = document.querySelector('#page-content');
+let gameList = document.querySelector('#currentGamesList');
 const savedGameList = localStorage.getItem('gameList');
-
-console.log(savedGameList)
-
-if (savedGameList) {
-    console.log('in save')
-    gameList.innerHTML = savedGameList;
-    betGamesMapList = new Map(Object.entries(JSON.parse(localStorage.getItem('betGames'))))
-    bet = new Bet(Object.entries(JSON.parse(localStorage.getItem('bet'))));
-    betGamesList();
-    console.log(betGamesMapList);
-}
 
 class Bet {
 
@@ -98,9 +87,17 @@ let betGamesMapList = new Map();
 let divBetList = document.getElementById("bet-game-list");
 document.getElementById('betMoney').addEventListener('input', () => {
     tempBetMoney = document.getElementById('betMoney').value;
+    console.log()
     betGamesList();
 })
 showInputAndButton();
+
+if (savedGameList) {
+    gameList.innerHTML = savedGameList;
+    betGamesMapList = new Map(Object.entries(JSON.parse(localStorage.getItem('betGames'))))
+    bet = new Bet(Object.entries(JSON.parse(localStorage.getItem('bet'))));
+    betGamesList();
+}
 
 function createTempBetGamesDiv() {
     let betGamesTemp = document.createElement('div');
@@ -123,10 +120,10 @@ function betGamesList() {
         rateSum += (parseFloat(v.winRate));
         const gameTitle = document.createElement("l1");
         gameTitle.setAttribute('class', 'list-group-item list-group-item-secondary')
-        ulList.appendChild(gameTitle).innerHTML = "<b>Drużyny:</b> " + v.game_Title;
+        ulList.appendChild(gameTitle).innerHTML = "<b>Drużyny:</b> " + v.gameTitle;
         const winningConditionAndRate = document.createElement("li");
         winningConditionAndRate.setAttribute('class', 'list-group-item list-group-item-secondary')
-        ulList.appendChild(winningConditionAndRate).innerHTML = "<b>Zakład na:</b> " + v.bet_For  + "<br><b>Kurs:</b> " + v.win_Rate;
+        ulList.appendChild(winningConditionAndRate).innerHTML = "<b>Zakład na:</b> " + v.betFor  + "<br><b>Kurs:</b> " + v.winRate;
     }
     let finalSum = (betGamesMapList.size === 1) ? rateSum : rateSum * .84;
     rateSum = rateSum.toFixed(2)
@@ -157,6 +154,7 @@ function showInputAndButton() {
         button.style.display = 'none';
     } else {
         betDiv.style.display = "block";
+
     }
     if (tempBetMoney > 0) {button.style.display = 'block'}
 }

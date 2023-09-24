@@ -19,7 +19,7 @@
                class="blink border rounded alert-warning text-center"></p>
         </div>
     </div>
-    <div class="content col m-2">
+    <div class="content col m-2" id="currentGamesList">
         <p class="text-center"><b>Lista meczów</b></p>
         <p class="text-center"><b>Aby dodać mecz do kuponu, kliknij na kurs</b></p>
         <div th:each="game : ${listOfAvailableGames}" id="list-of-games">
