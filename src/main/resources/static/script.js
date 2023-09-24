@@ -82,20 +82,23 @@ class BetGame {
 }
 
 let tempBetMoney;
-let bet = new Bet();
+let bet;
 let betGamesMapList = new Map();
 let divBetList = document.getElementById("bet-game-list");
 document.getElementById('betMoney').addEventListener('input', () => {
     tempBetMoney = document.getElementById('betMoney').value;
-    console.log()
     betGamesList();
 })
 showInputAndButton();
 
-if (savedGameList) {
+if ((localStorage.getItem('fromLocalStorageBetGamesList'))) {
     gameList.innerHTML = savedGameList;
-    betGamesMapList = new Map(Object.entries(JSON.parse(localStorage.getItem('betGames'))))
-    bet = new Bet(Object.entries(JSON.parse(localStorage.getItem('bet'))));
+    betGamesMapList = new Map(Object.entries(JSON.parse(localStorage.getItem('fromLocalStorageBetGamesList'))))
+    console.log('in storage')
+    let betJsonObj = localStorage.getItem('fromLocalStorageBet');
+    console.log("betJsonObj: " + betJsonObj)
+    const betFromJson =  new Bet(JSON.parse(betJsonObj));
+    console.log("betFromJson: " + betFromJson.money_To_Win)
     betGamesList();
 }
 
@@ -139,9 +142,8 @@ function betGamesList() {
     } else if (tempBetMoney > 0){
         ulList.appendChild(moneyToWin).innerHTML = "<b>Do wygrania:</b> " + finalSum + "zł";
     }
-    bet.rate = rateSum;
-    bet.moneyToWin = finalSum.valueOf();
-    bet.betMoney = tempBetMoney;
+    bet = new Bet(null, tempBetMoney, rateSum, finalSum , 0, null);
+
     showInputAndButton();
     appendOnChange();
 }
@@ -154,6 +156,8 @@ function showInputAndButton() {
         button.style.display = 'none';
     } else {
         betDiv.style.display = "block";
+        console.log("else block" + bet.betMoney)
+
 
     }
     if (tempBetMoney > 0) {button.style.display = 'block'}
@@ -196,8 +200,8 @@ function removeGame(gameId) {
 
 function appendOnChange() {
     localStorage.setItem('gameList', gameList.innerHTML)
-    localStorage.betGames = JSON.stringify(Object.fromEntries(betGamesMapList));
-    localStorage.bet = JSON.stringify(bet);
+    localStorage.fromLocalStorageBetGamesList = JSON.stringify(Object.fromEntries(betGamesMapList));
+    localStorage.fromLocalStorageBet = JSON.stringify(bet, null);
 }
 
 
