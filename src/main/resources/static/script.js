@@ -132,6 +132,7 @@ function sendList() {
         },
         error: function (data) {
             alert("Niektóre mecze się zakończyły, zacznij on nowa.")
+            localStorage.clear();
             location.reload();
         }
     })
