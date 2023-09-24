@@ -89,23 +89,27 @@ public class BetService {
             bet = toWin(bet);
             betRepository.save(bet);
         }
-        for (Bet bet : betRepository.findAll()) {
-            if (!bet.isNotActive()) {
-                List<BetGame> allGamesByBetBetId = betGameRepository.findAllByBet_BetId(bet.getBetId());
-                boolean allMatchEnded = allGamesByBetBetId.stream()
+        for (Bet bet : betListIncludingEditedGame) {
+            checkIfBetCanBeSetToNotActive(bet);
+            betRepository.save(bet);
+        }
+    }
+
+    public void checkIfBetCanBeSetToNotActive(Bet bet) {
+        if (!bet.isNotActive()) {
+            List<BetGame> allGamesByBetBetId = bet.getBetGames();
+            boolean allMatchEnded = allGamesByBetBetId.stream()
+                    .allMatch(betGame ->
+                            gameRepository.findById(betGame.getGameId()).get().getGameResult() != GameResult.WAITING);
+            if (allMatchEnded) {
+                bet.setNotActive(true);
+                boolean allResultsMatchBetsTyping = allGamesByBetBetId.stream()
                         .allMatch(betGame ->
-                                gameRepository.findById(betGame.getGameId()).get().getGameResult() != GameResult.WAITING);
-                if (allMatchEnded) {
-                    bet.setNotActive(true);
-                    boolean allResultsMatchBetsTyping = allGamesByBetBetId.stream()
-                            .allMatch(betGame ->
-                                    betGame.getGameResult() == gameRepository.findById(betGame.getGameId()).get().getGameResult());
-                    if (!allResultsMatchBetsTyping) {
-                        bet.setMoneyToWin(new BigDecimal(0));
-                    }
+                                betGame.getGameResult() == gameRepository.findById(betGame.getGameId()).get().getGameResult());
+                if (!allResultsMatchBetsTyping) {
+                    bet.setMoneyToWin(new BigDecimal(0));
                 }
             }
-            betRepository.save(bet);
         }
     }
 }

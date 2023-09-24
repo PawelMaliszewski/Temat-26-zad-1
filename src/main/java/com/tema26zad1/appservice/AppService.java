@@ -34,6 +34,7 @@ public class AppService {
                 Bet bet = betRepository.findById(betGame.getBet().getBetId()).get();
                 bet.getBetGames().remove(betGame);
                 bet = betService.toWin(bet);
+                betService.checkIfBetCanBeSetToNotActive(bet);
                 betRepository.save(bet);
             }
         }

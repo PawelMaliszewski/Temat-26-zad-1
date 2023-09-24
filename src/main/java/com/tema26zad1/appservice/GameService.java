@@ -8,6 +8,7 @@ import com.tema26zad1.game.GameRepository;
 import com.tema26zad1.game.GameResult;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -64,7 +65,8 @@ public class GameService {
     }
 
     public Boolean checkIfAnyGameEnded(@NotNull Bet bet) {
-        return bet.getBetGames().stream().noneMatch(betGame ->
-                gameRepository.findById(betGame.getGameId()).get().getGameResult().equals(GameResult.WAITING));
+            return !gameRepository.findAllById(bet.getBetGames().stream()
+                    .map(BetGame::getGameId).toList()).stream().
+                    allMatch(game -> game.getGameResult().equals(GameResult.WAITING));
     }
 }
