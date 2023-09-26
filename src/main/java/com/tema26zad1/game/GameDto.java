@@ -2,11 +2,8 @@ package com.tema26zad1.game;
 
 import jakarta.persistence.*;
 
-@Entity
-public class Game {
+public class GameDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gameId;
     private String nameOfTeamA;
     private String nameOfTeamB;
@@ -18,7 +15,7 @@ public class Game {
     @Enumerated(EnumType.STRING)
     private GameResult gameResult;
 
-    public Game() {
+    public GameDto() {
     }
 
     public Long getGameId() {
@@ -80,5 +77,33 @@ public class Game {
     public String gameTitle() {
         return nameOfTeamA + " VS " + nameOfTeamB;
     }
-}
 
+    public String divGroupName() {
+        return "group" + gameId;
+    }
+
+
+    public String idForHtmlInputTeamA() {
+        return "ag" + gameId;
+    }
+
+    public String idForHtmlInputDraw() {
+        return "bg" + gameId;
+    }
+
+    public String idForHtmlInputTeamB() {
+        return "cg" + gameId;
+    }
+
+    public String jsDataForTeamA() {
+        return gameId + ";" + (nameOfTeamA + " vs " + nameOfTeamB) + ";" + nameOfTeamA + ";" + GameResult.TEAM_A_WON.name() + ";" + teamAWinRate + ";";
+    }
+
+    public String jsDataForDraw() {
+        return gameId + ";" + (nameOfTeamA + " vs " + nameOfTeamB) + ";" + "Remis" + ";" + GameResult.DRAW.name() + ";" + drawRate + ";";
+    }
+
+    public String jsDataForTeamB() {
+        return gameId + ";" + (nameOfTeamA + " vs " + nameOfTeamB) + ";" + nameOfTeamB + ";" + GameResult.TEAM_B_WON.name() + ";" + teamBWinRate;
+    }
+}

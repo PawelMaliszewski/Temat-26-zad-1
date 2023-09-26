@@ -9,7 +9,6 @@ import com.tema26zad1.game.GameRepository;
 import com.tema26zad1.game.GameResult;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -33,12 +32,6 @@ public class BetService {
 
     public List<BetGame> findAllBetGames() {
         return betGameRepository.findAll();
-    }
-
-
-
-    public void saveBet(Bet bet) {
-        betRepository.save(bet);
     }
 
     public List<Bet> findAllBets() {
@@ -90,12 +83,12 @@ public class BetService {
             betRepository.save(bet);
         }
         for (Bet bet : betListIncludingEditedGame) {
-            checkIfBetCanBeSetToNotActive(bet);
+            setBetAsNotActiveWithAnEventualWinIfAllGamesHaveEnded(bet);
             betRepository.save(bet);
         }
     }
 
-    public void checkIfBetCanBeSetToNotActive(Bet bet) {
+    public void setBetAsNotActiveWithAnEventualWinIfAllGamesHaveEnded(Bet bet) {
         if (!bet.isNotActive()) {
             List<BetGame> allGamesByBetBetId = bet.getBetGames();
             boolean allMatchEnded = allGamesByBetBetId.stream()
@@ -111,5 +104,33 @@ public class BetService {
                 }
             }
         }
+    }
+
+    public void deleteBetIfOneBetGameOrJustBetGameByGameId(@NotNull List<BetGame> betGamesByGameId) {
+        List<BetGame> oneBetGameOnBetList = betGamesByGameId.stream()
+                .filter(betGame -> betRepository.findById(betGame.getBet().getBetId()).get().getBetGames().size() == 1).toList();
+        if (!oneBetGameOnBetList.isEmpty()) {
+            for (BetGame betGame : oneBetGameOnBetList) {
+                Bet bet = betRepository.findById(betGame.getBet().getBetId()).get();
+                betRepository.delete(bet);
+            }
+        } else {
+            for (BetGame betGame : betGamesByGameId) {
+                Bet bet = betRepository.findById(betGame.getBet().getBetId()).get();
+                bet.getBetGames().remove(betGame);
+                bet = toWin(bet);
+                setBetAsNotActiveWithAnEventualWinIfAllGamesHaveEnded(bet);
+                betRepository.save(bet);
+            }
+        }
+    }
+
+    public void saveBetAndSetValues(Bet bet) {
+        bet.getBetGames().forEach(betGame -> betGame.setBet(bet));
+        for (BetGame betGame : bet.getBetGames()) {
+            findWinRate(betGame, gameRepository.findById(betGame.getGameId()).get());
+        }
+        toWin(bet);
+        betRepository.save(bet);
     }
 }

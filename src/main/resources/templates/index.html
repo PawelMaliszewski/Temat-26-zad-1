@@ -23,7 +23,7 @@
         <p class="text-center"><b>Lista meczów</b></p>
         <p class="text-center"><b>Aby dodać mecz do kuponu, kliknij na kurs</b></p>
         <div th:each="game : ${listOfAvailableGames}" id="list-of-games">
-            <div th:id="${game.groupName()}">
+            <div th:id="${game.divGroupName()}">
                 <table class="table table-primary">
                     <tr>
                         <th class="align-middle" rowspan="2"
@@ -37,33 +37,33 @@
                     <tr>
                         <th>
                             <input type="radio" class="" autocomplete="off"
-                                   th:id="${game.idForElementA()}" th:name="${game.groupName()}"
-                                   th:data-jsData="${game.jsDataA()}"
+                                   th:id="${game.idForHtmlInputTeamA()}" th:name="${game.divGroupName()}"
+                                   th:data-jsData="${game.jsDataForTeamA()}"
                                    onclick="addBetGameToList(this.getAttribute('data-jsData'))">
                             <label class="btn btn-outline-success" th:text="${game.teamAWinRate}"
-                                   th:for="|${game.idForElementA()}|" th:id="|${game.idForElementA()}L|"></label>
+                                   th:for="|${game.idForHtmlInputTeamA()}|"></label>
                         </th>
                         <th>
                             <div>
                                 <input type="radio" class="" autocomplete="off"
-                                       th:id="${game.idForElementB()}" th:name="${game.groupName()}"
-                                       th:data-jsData="${game.jsDataB()}"
+                                       th:id="${game.idForHtmlInputDraw()}" th:name="${game.divGroupName()}"
+                                       th:data-jsData="${game.jsDataForDraw()}"
                                        onclick="addBetGameToList(this.getAttribute('data-jsData'))">
                                 <label class="btn btn-outline-success" th:text="${game.drawRate}"
-                                       th:for="${game.idForElementB()}"></label>
+                                       th:for="${game.idForHtmlInputDraw()}"></label>
                             </div>
                         </th>
                         <th>
                             <input type="radio" class="" autocomplete="off"
-                                   th:id="${game.idForElementC()}" th:name="${game.groupName()}"
-                                   th:data-jsData="${game.jsDataC()}"
+                                   th:id="${game.idForHtmlInputTeamB()}" th:name="${game.divGroupName()}"
+                                   th:data-jsData="${game.jsDataForTeamB()}"
                                    onclick="addBetGameToList(this.getAttribute('data-jsData'))">
                             <label class="btn btn-outline-success" th:text="${game.teamBWinRate}"
-                                   th:for="${game.idForElementC()}"></label>
+                                   th:for="${game.idForHtmlInputTeamB()}"></label>
                         </th>
                         <th>
                             <input type="radio" class="" autocomplete="off"
-                                   th:id="|delete${game.gameId}|" th:name="${game.groupName()}"
+                                   th:id="|delete${game.gameId}|" th:name="${game.divGroupName()}"
                                    th:data-gameId="${game.gameId}" checked
                                    onclick="removeGame(this.getAttribute('data-gameId'))">
                             <label class="btn btn-light"

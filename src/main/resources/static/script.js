@@ -34,15 +34,12 @@ showInputAndButton();
 function setRadioButtons() {
     for (let [k, v] of betGamesMapList) {
         if (v.gameResult === 'TEAM_A_WON') {
-            console.log("A")
             document.getElementById('ag' + k).setAttribute('checked', '')
         }
         if (v.gameResult === 'DRAW') {
-            console.log("D")
             document.getElementById('bg' + k).setAttribute('checked', '')
         }
         if (v.gameResult === 'TEAM_B_WON') {
-            console.log("B")
             document.getElementById('cg' + k).setAttribute('checked', '')
         }
     }
@@ -51,7 +48,6 @@ function setRadioButtons() {
 if ((localStorage.getItem('fromLocalStorageBetGamesList'))) {
     betGamesMapList = new Map(Object.entries(JSON.parse(localStorage.getItem('fromLocalStorageBetGamesList'))))
     tempBetMoney = localStorage.getItem('tempBetMoney')
-    // setRadioButtons();
     betGamesList()
     setRadioButtons()
 }
@@ -97,7 +93,7 @@ function betGamesList() {
         ulList.appendChild(moneyToWin).innerHTML = "<b>Do wygrania:</b> " + finalSum + "zł";
     }
 
-    bet = new Bet(null, tempBetMoney, rateSum, finalSum, 0, null);
+    bet = new Bet(null, tempBetMoney, 0.0, 0.0, 0, null);
     showInputAndButton();
     appendOnChange();
 }

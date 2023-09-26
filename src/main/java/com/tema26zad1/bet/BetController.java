@@ -2,16 +2,17 @@ package com.tema26zad1.bet;
 
 import com.tema26zad1.appservice.BetService;
 import com.tema26zad1.appservice.GameService;
-import com.tema26zad1.betgame.BetGame;
+import com.tema26zad1.game.Game;
+import com.tema26zad1.game.GameDto;
 import org.jetbrains.annotations.NotNull;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class BetController {
@@ -19,14 +20,18 @@ public class BetController {
     private final BetService betService;
     private final GameService gameService;
 
-    public BetController(BetService betService, GameService gameService) {
+    private final ModelMapper modelMapper;
+
+    public BetController(BetService betService, GameService gameService, ModelMapper modelMapper) {
         this.betService = betService;
         this.gameService = gameService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("listOfAvailableGames", gameService.gamesForBet());
+        model.addAttribute("listOfAvailableGames", gameService.gamesForBet().stream()
+                .map(this::convertToDto).collect(Collectors.toList()));
         model.addAttribute("top4GamesList", gameService.fourMostFrequentBetGames());
         return "index";
     }
@@ -52,13 +57,13 @@ public class BetController {
         if (gameService.checkIfAnyGameEnded(bet)) {
             return ResponseEntity.badRequest().build();
         } else {
-            System.out.println(bet.toString());
-            List<BetGame> tempBetGames = new ArrayList<>(bet.getBetGames());
+            betService.saveBetAndSetValues(bet);
             bet.getBetGames().clear();
-            betService.saveBet(bet);
-            tempBetGames.forEach(betGame -> betGame.setBet(bet));
-            betService.getBetGameRepository().saveAll(tempBetGames);
             return ResponseEntity.ok(bet);
         }
+    }
+
+    private GameDto convertToDto(Game game) {
+        return modelMapper.map(game, GameDto.class);
     }
 }

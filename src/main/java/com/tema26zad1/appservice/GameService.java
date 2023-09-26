@@ -32,9 +32,8 @@ public class GameService {
         return gameRepository.findAllGamesThatAreNotEnded();
     }
 
-    public Game findGameById(Long gameId) {
-        Optional<Game> byId = gameRepository.findById(gameId);
-        return byId.orElse(null);
+    public Optional<Game> findGameById(Long gameId) {
+        return gameRepository.findById(gameId);
     }
 
     public List<Game> findAllGames() {
@@ -42,26 +41,20 @@ public class GameService {
     }
 
     public List<Game> fourMostFrequentBetGames() {
-        List<Long> collectList = betGameRepository.findAll()
-                .stream()
-                .filter(betGame -> gameRepository.findById(betGame.getGameId()).isPresent())
-                .filter(betGame -> gameRepository.findById(betGame.getGameId()).get().getGameResult().equals(GameResult.WAITING))
-                .collect(Collectors.groupingBy(BetGame::getGameId, Collectors.counting()))
+        List<Long> gameIds = betGameRepository.findAllGameIDsThatAreNotEndedBasedOnBetGames();
+        List<Long> collectList = gameIds.stream()
+                .collect(Collectors.groupingBy(Long::longValue, Collectors.counting()))
                 .entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .map(Map.Entry::getKey)
                 .limit(4)
                 .toList();
+        collectList.forEach(System.out::println);
         return gameRepository.findAllById(collectList);
     }
 
     public void deleteGameById(Long gameId) {
         gameRepository.deleteById(gameId);
-    }
-
-    public List<Game> listOfGamesThatAreEnded() {
-        List<Game> allGamesById = gameRepository.findAll();
-        return allGamesById.stream().filter(game -> !game.getGameResult().equals(GameResult.WAITING)).toList();
     }
 
     public Boolean checkIfAnyGameEnded(@NotNull Bet bet) {

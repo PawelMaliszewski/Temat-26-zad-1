@@ -44,11 +44,11 @@
                                 <th class=" w-50" colspan="4" th:text="|Stawka: ${bet.betMoney}|"></th>
                                 <th:block th:unless="${bet.notActive}">
                                     <th colspan="4" th:if="${bet.moneyToWin > 0}"
-                                        th:text="|Do wygrania: ${bet.moneyToWin}|"></th>
+                                        th:text="|Do wygrania: ${bet.moneyToWin}zł|"></th>
                                 </th:block>
                                 <th:block th:if="${bet.notActive}">
                                     <th colspan="4" th:if="${bet.moneyToWin > 0}"
-                                        th:text="|Wygrana: ${bet.moneyToWin}|"></th>
+                                        th:text="|Wygrana: ${bet.moneyToWin}zł|"></th>
                                     <th colspan="4" th:if="${bet.moneyToWin == 0}">Zakład przegrany</th>
                                 </th:block>
                             </tr>
