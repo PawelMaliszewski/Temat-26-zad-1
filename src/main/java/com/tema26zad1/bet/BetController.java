@@ -63,6 +63,17 @@ public class BetController {
         }
     }
 
+    @PostMapping(value = "/bet_get_quote")
+    public ResponseEntity<Bet> betQuote(@RequestBody Bet bet) {
+        if (gameService.checkIfAnyGameEnded(bet)) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            bet = betService.setValuesForTheBet(bet);
+            bet.getBetGames().clear();
+            return ResponseEntity.ok(bet);
+        }
+    }
+
     private GameDto convertToDto(Game game) {
         return modelMapper.map(game, GameDto.class);
     }

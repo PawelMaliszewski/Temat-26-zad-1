@@ -1,6 +1,4 @@
-
 class Bet {
-
     constructor(betId, betMoney, rate, moneyToWin, notActive, betGames) {
         this.betId = betId;
         this.betMoney = betMoney;
@@ -22,11 +20,13 @@ class BetGame {
 }
 
 let tempBetMoney = 0.0;
-let bet;
 let betGamesMapList = new Map();
+let bet;
+
 let divBetList = document.getElementById("bet-game-list");
 document.getElementById('betMoney').addEventListener('input', () => {
     tempBetMoney = document.getElementById('betMoney').value;
+    appendOnChange()
     betGamesList();
 })
 showInputAndButton();
@@ -48,8 +48,12 @@ function setRadioButtons() {
 if ((localStorage.getItem('fromLocalStorageBetGamesList'))) {
     betGamesMapList = new Map(Object.entries(JSON.parse(localStorage.getItem('fromLocalStorageBetGamesList'))))
     tempBetMoney = localStorage.getItem('tempBetMoney')
-    betGamesList()
+    bet = new Bet(null, 0.00, 0.0, 0.0, 0, null);
+    bet.betMoney = tempBetMoney;
     setRadioButtons()
+    betGamesList()
+} else {
+    bet = new Bet(null, 0.00, 0.0, 0.0, 0, null);
 }
 
 function createTempBetGamesDiv() {
@@ -65,37 +69,49 @@ function betGamesList() {
     if (divInsideBetGameChild != null) {
         divInsideBetGameChild.remove();
     }
-    let betGamesTemp = createTempBetGamesDiv();
-    let ulList = document.createElement('ul');
-    ulList.setAttribute('class', 'list-group-item');
-    betGamesTemp.appendChild(ulList)
-    for (let [k, v] of betGamesMapList) {
-        rateSum += (parseFloat(v.winRate));
-        const gameTitle = document.createElement("l1");
-        gameTitle.setAttribute('class', 'list-group-item list-group-item-secondary')
-        ulList.appendChild(gameTitle).innerHTML = "<b>Drużyny:</b> " + v.gameTitle;
-        const winningConditionAndRate = document.createElement("li");
-        winningConditionAndRate.setAttribute('class', 'list-group-item list-group-item-secondary')
-        ulList.appendChild(winningConditionAndRate).innerHTML = "<b>Zakład na:</b> " + v.betFor + "<br><b>Kurs:</b> " + v.winRate;
+    if (betGamesMapList.size > 0) {
+        let betGamesTemp = createTempBetGamesDiv();
+        let ulList = document.createElement('ul');
+        ulList.setAttribute('class', 'list-group-item');
+        betGamesTemp.appendChild(ulList);
+        for (let [k, v] of betGamesMapList) {
+            rateSum += (parseFloat(v.winRate));
+            const gameTitle = document.createElement("l1");
+            gameTitle.setAttribute('class', 'list-group-item list-group-item-secondary');
+            ulList.appendChild(gameTitle).innerHTML = "<b>Drużyny:</b> " + v.gameTitle;
+            const winningConditionAndRate = document.createElement("li");
+            winningConditionAndRate.setAttribute('class', 'list-group-item list-group-item-secondary');
+            ulList.appendChild(winningConditionAndRate).innerHTML = "<b>Zakład na:</b> " + v.betFor + "<br><b>Kurs:</b> " + v.winRate;
+        }
+        let dataBet = new Bet(null, tempBetMoney, 0.0, 0.0, 0, null);
+        dataBet.betGames = Array.from(betGamesMapList.values());
+        let data = JSON.stringify(dataBet);
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: '/bet_get_quote',
+            data: data,
+            success: function (data) {
+                $(data).each(function (i, value) {
+                    const moneyToWin = document.createElement("li");
+                    moneyToWin.setAttribute('class', 'list-group-item list-group-item-warning')
+                    moneyToWin.setAttribute('id', 'moneyToWin')
+                    if (betGamesMapList.size.valueOf() > 1) {
+                        ulList.appendChild(moneyToWin).innerHTML = "<b>Kurs całkowity:</b> " + value.rate + "<br>"
+                            + ((tempBetMoney > 0) ? "<b>Do wygrania:</b> " + value.moneyToWin +"zł" : "");
+                    } else if (tempBetMoney > 0) {
+                        ulList.appendChild(moneyToWin).innerHTML = "<b>Do wygrania:</b> " + value.moneyToWin + "zł";
+                    }
+                    showInputAndButton();
+                    appendOnChange();
+                })
+            },
+            error: function () {
+                alert("Błąd serwera nie udało się pobrać wartości zakładu")
+            }
+        })
     }
-    let finalSum = (betGamesMapList.size === 1) ? rateSum : rateSum * .84;
-    rateSum = rateSum.toFixed(2)
-    if (tempBetMoney > 0) {
-        finalSum = (tempBetMoney * finalSum).toFixed(2);
-    }
-    const moneyToWin = document.createElement("li");
-    moneyToWin.setAttribute('class', 'list-group-item list-group-item-warning')
-    moneyToWin.setAttribute('id', 'moneyToWin')
-    if (betGamesMapList.size.valueOf() > 1) {
-        ulList.appendChild(moneyToWin).innerHTML = "<b>Kurs całkowity:</b> " + rateSum + "<br>"
-            + ((tempBetMoney > 0) ? "<b>Do wygrania:</b> " + finalSum + "zł" : "");
-    } else if (tempBetMoney > 0) {
-        ulList.appendChild(moneyToWin).innerHTML = "<b>Do wygrania:</b> " + finalSum + "zł";
-    }
-
-    bet = new Bet(null, tempBetMoney, 0.0, 0.0, 0, null);
-    showInputAndButton();
-    appendOnChange();
 }
 
 function showInputAndButton() {
@@ -114,6 +130,7 @@ function showInputAndButton() {
 }
 
 function sendList() {
+    bet.betMoney = tempBetMoney;
     bet.betGames = Array.from(betGamesMapList.values());
     const data = JSON.stringify(bet);
     $.ajax({
@@ -126,7 +143,7 @@ function sendList() {
             location.replace('/bet?betId=' + data.betId)
             localStorage.clear()
         },
-        error: function (data) {
+        error: function () {
             alert("Niektóre mecze się zakończyły, zacznij on nowa.")
             localStorage.clear();
             location.reload();
@@ -141,8 +158,7 @@ function addBetGameToList(jsData) {
     let jsDataArray = jsData.split(";");
     betGamesMapList.set(jsDataArray[0], new BetGame(jsDataArray[0], jsDataArray[1], jsDataArray[2],
         jsDataArray[3], jsDataArray[4]));
-    betGamesList()
-    ;
+    betGamesList();
 }
 
 function removeGame(gameId) {

@@ -126,11 +126,15 @@ public class BetService {
     }
 
     public void saveBetAndSetValues(Bet bet) {
+        bet = setValuesForTheBet(bet);
+        betRepository.save(bet);
+    }
+
+    public Bet setValuesForTheBet(Bet bet) {
         bet.getBetGames().forEach(betGame -> betGame.setBet(bet));
         for (BetGame betGame : bet.getBetGames()) {
             findWinRate(betGame, gameRepository.findById(betGame.getGameId()).get());
         }
-        toWin(bet);
-        betRepository.save(bet);
+        return toWin(bet);
     }
 }
