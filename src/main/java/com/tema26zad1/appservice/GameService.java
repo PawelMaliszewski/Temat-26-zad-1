@@ -49,7 +49,6 @@ public class GameService {
                 .map(Map.Entry::getKey)
                 .limit(4)
                 .toList();
-        collectList.forEach(System.out::println);
         return gameRepository.findAllById(collectList);
     }
 

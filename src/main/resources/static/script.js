@@ -33,19 +33,21 @@ showInputAndButton();
 
 function setRadioButtons() {
     for (let [k, v] of betGamesMapList) {
-        if (v.gameResult === 'TEAM_A_WON') {
-            document.getElementById('ag' + k).setAttribute('checked', '')
-        }
-        if (v.gameResult === 'DRAW') {
-            document.getElementById('bg' + k).setAttribute('checked', '')
-        }
-        if (v.gameResult === 'TEAM_B_WON') {
-            document.getElementById('cg' + k).setAttribute('checked', '')
+        if (document.getElementById('ag' + k)) {
+            if (v.gameResult === 'TEAM_A_WON') {
+                document.getElementById('ag' + k).setAttribute('checked', '')
+            }
+            if (v.gameResult === 'DRAW') {
+                document.getElementById('bg' + k).setAttribute('checked', '')
+            }
+            if (v.gameResult === 'TEAM_B_WON') {
+                document.getElementById('cg' + k).setAttribute('checked', '')
+            }
         }
     }
 }
-
-if ((localStorage.getItem('fromLocalStorageBetGamesList'))) {
+console.log(localStorage.getItem('fromLocalStorageBetGamesList'))
+if (localStorage.getItem('fromLocalStorageBetGamesList')) {
     betGamesMapList = new Map(Object.entries(JSON.parse(localStorage.getItem('fromLocalStorageBetGamesList'))))
     tempBetMoney = localStorage.getItem('tempBetMoney')
     bet = new Bet(null, 0.00, 0.0, 0.0, 0, null);
@@ -108,7 +110,9 @@ function betGamesList() {
                 })
             },
             error: function () {
-                alert("Błąd serwera nie udało się pobrać wartości zakładu")
+                alert("Niektóre mecze się zakończyły, zacznij on nowa.")
+                localStorage.clear();
+                location.reload();
             }
         })
     }
