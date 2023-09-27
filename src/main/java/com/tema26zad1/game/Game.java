@@ -76,9 +76,5 @@ public class Game {
     public void setGameResult(GameResult gameResult) {
         this.gameResult = gameResult;
     }
-
-    public String gameTitle() {
-        return nameOfTeamA + " VS " + nameOfTeamB;
-    }
 }
 
