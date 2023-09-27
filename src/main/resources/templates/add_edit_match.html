@@ -9,7 +9,7 @@
 <main layout:fragment="content">
     <div  class="container">
         <h2 style="margin-top: 25px" th:text="(${game.gameId != null}) ? 'Edytuj mecz' : 'Dodaj mecz'"></h2>
-        <form action="/save_game" th:object="${game}" method="post">
+        <form th:action="@{/save_game}" th:object="${game}" method="post">
             <input th:if="*{gameId != null}" type="hidden" th:field="*{gameId}">
             <div class="mb-3">
                 <label for="team_a" class="form-label">Nazwa drużyny gospodarzy</label>

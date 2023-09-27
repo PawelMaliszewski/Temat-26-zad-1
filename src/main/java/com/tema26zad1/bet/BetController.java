@@ -28,7 +28,7 @@ public class BetController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/")
+    @GetMapping(value = ("/"))
     public String home(Model model) {
         model.addAttribute("listOfAvailableGames", gameService.gamesForBet().stream()
                 .map(this::convertToDto).collect(Collectors.toList()));

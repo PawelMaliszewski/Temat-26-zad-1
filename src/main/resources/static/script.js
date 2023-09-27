@@ -90,7 +90,7 @@ function betGamesList() {
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             type: 'POST',
-            url: '/bet_get_quote',
+            url: 'bet_get_quote',
             data: data,
             success: function (data) {
                 $(data).each(function (i, value) {
@@ -137,10 +137,10 @@ function sendList() {
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         type: 'POST',
-        url: '/bet',
+        url: 'bet',
         data: data,
         success: function (data) {
-            location.replace('/bet?betId=' + data.betId)
+            location.replace('bet?betId=' + data.betId)
             localStorage.clear()
         },
         error: function () {

@@ -12,10 +12,10 @@
             <h1 class="header-text">JAVA BET NAJLEPSZE ZAKŁADY</h1>
         </div>
         <div class="d-flex justify-content-center">
-            <a href="/" class="link-primary p-2 home_link"  >Główna strona</a>
-            <a href="/game_list" class="link-primary p-2 games-link">Mecze </a>
-            <a href="/bet_list" class="link-primary p-2 bet-list-link">Zakłady</a>
-            <a href="/find_bet" class="link-primary p-2 find-bet-link">Znajdź zakład</a>
+            <a th:href="@{/}" class="link-primary p-2 home_link"  >Główna strona</a>
+            <a th:href="@{/game_list}" class="link-primary p-2 games-link">Mecze </a>
+            <a th:href="@{/bet_list}" class="link-primary p-2 bet-list-link">Zakłady</a>
+            <a th:href="@{/find_bet}" class="link-primary p-2 find-bet-link">Znajdź zakład</a>
         </div>
     </div>
     <div th:fragment="footer">
@@ -24,9 +24,7 @@
 <th:block th:fragment="script">
     <script src="jquery-3.6.4.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>>
-    <script type="text/javascript" src="/script.js"></script>
+    <script type="text/javascript" th:src="@{/script.js}"></script>
 </th:block>
-
-
 </body>
 </html>

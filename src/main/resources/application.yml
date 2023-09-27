@@ -1,5 +1,4 @@
 spring:
-  session:
   datasource:
     url: jdbc:h2:mem:test,MODE=MYSQL
   jpa:
@@ -16,4 +15,7 @@ spring:
     jpa:
       repositories:
         enabled: true
+server:
+  servlet:
+    context-path: /application
 

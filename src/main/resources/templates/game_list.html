@@ -36,16 +36,16 @@
                 <td class="text-center align-middle" th:text="*{gameResult.getDescription()}">a</td>
                 <td class="hstack align-middle">
                     <th:block th:if="*{gameResult.name() == 'WAITING'}">
-                        <a th:href="|/game/edit?game_id=*{gameId}|" class="btn btn-primary">Edytuj</a>
+                        <a th:href="@{|/game/edit?game_id=*{gameId}|}" class="btn btn-primary">Edytuj</a>
                     </th:block>
-                    <form action="/delete_game" method="post" th:object="${Long}">
+                    <form th:action="@{/delete_game}" method="post" th:object="${Long}">
                         <input hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
                         <button type="submit" class="btn btn-danger me-2"
                                 onclick="return confirm('Czy na pewno chcesz usunąć ten mecz')">Usuń
                         </button>
                     </form>
                     <th:block th:if="*{gameResult.name() == 'WAITING'}">
-                        <form action="/random_result" method="post" th:object="${Long}">
+                        <form th:action="@{/random_result}" method="post" th:object="${Long}">
                             <input hidden="hidden" th:value="${game.getGameId()}" th:name="gameId">
                             <button type="submit" class="btn btn-success">Wylosuj wynik</button>
                         </form>
@@ -54,7 +54,7 @@
             </tr>
             </tbody>
         </table>
-            <a href="/game/add" class="btn btn-warning">Dodaj gre</a>
+            <a th:href="@{/game/add}" class="btn btn-warning">Dodaj gre</a>
     </div>
 </main>
 </body>

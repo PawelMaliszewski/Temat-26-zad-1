@@ -5,7 +5,7 @@
       layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title th:text="(${bet}) ? 'Twój zakład' : 'Znajdź zakład'"></title>
 </head>
 <body>
 <main layout:fragment="content">
@@ -14,7 +14,7 @@
             <h3 style="color: red" th:text="${notFound}"></h3>
         </div>
         <div th:unless="${bet}" class="d-flex justify-content-center col-xs-12 text-center">
-            <form action="/find_bet?betId=" method="get" th:object="${Long}">
+            <form th:action="|@{/find_bet?betId=}|" method="get" th:object="${Long}">
                 <label for="betId" class="form-label text-center"></label>
                 <input id="betId" name="betId" type="number" step="1" min="1">
                 <button type="submit" class="btn btn-success text-center">Wyszukaj zakład</button>
